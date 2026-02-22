@@ -3,7 +3,7 @@ import { Incident } from "@/types/incident";
 export const incidents: Incident[] = [
   {
     id: "INC-2041",
-    title: "Mobile Data Outage — Greater Accra",
+    title: "Mobile Data Outage — Berlin-Brandenburg",
     service: "4G/5G Data",
     sev: "Critical",
     status: "Active",
@@ -13,10 +13,10 @@ export const incidents: Incident[] = [
     duration: "1h 23m",
     assigned: "Oliver Schmidt",
     summary:
-      "AI agent detected a complete 4G/5G data plane failure across Greater Accra region at 14:02 UTC. Root cause isolated to a BGP route withdrawal on the Tema Gateway router following a firmware push at 13:58. Approximately 340,000 subscribers affected. Emergency rollback has been deployed; service restoration estimated within 15–20 minutes. Call volumes to support centre elevated by 312%. Correlated alarms: ALM-8821, ALM-8822, ALM-8830.",
-    tags: ["4G Data", "5G NR", "Greater Accra", "BGP", "Gateway"],
+      "AI agent detected a complete 4G/5G data plane failure across the Berlin-Brandenburg region at 14:02 UTC. Root cause isolated to a BGP route withdrawal on the Frankfurt Gateway router following a firmware push at 13:58. Approximately 340,000 subscribers affected. Emergency rollback has been deployed; service restoration estimated within 15–20 minutes. Call volumes to support centre elevated by 312%. Correlated alarms: ALM-8821, ALM-8822, ALM-8830.",
+    tags: ["4G Data", "5G NR", "Berlin-Brandenburg", "BGP", "Frankfurt Gateway"],
     evidence: [
-      "ALM-8821 — BGP session drop on Tema-GW-01",
+      "ALM-8821 — BGP session drop on Frankfurt-GW-01",
       "ALM-8822 — Packet loss >98% on GGSN pool 4",
       "Downdetector score: 94/100 (critical)",
       "Support call volume +312% above baseline",
@@ -130,7 +130,7 @@ export const incidents: Incident[] = [
   },
   {
     id: "INC-2037",
-    title: "SMS Delivery Delays — Northern Region",
+    title: "SMS Delivery Delays — North Rhine-Westphalia",
     service: "SMS",
     sev: "Major",
     status: "In Progress",
@@ -138,13 +138,13 @@ export const incidents: Incident[] = [
     sparkTrend: [1, 2, 4, 5, 4, 6, 5, 4],
     score: "5.8",
     duration: "2h 55m",
-    assigned: "Ama Asante",
+    assigned: "Anna Weber",
     summary:
-      "SMS delivery latency in the Northern Region has climbed to an average of 4m 12s, against an SLA target of under 30 seconds. The SMSC cluster handling northern traffic is exhibiting queue depth overflow. AI agent traces the issue to a misconfigured rate limiter applied during the 11:00 UTC maintenance window. Ama Asante is coordinating with the Core team to revert the rate limiter configuration.",
-    tags: ["SMSC", "Northern Region", "Rate Limiter", "Queue"],
+      "SMS delivery latency in North Rhine-Westphalia has climbed to an average of 4m 12s, against an SLA target of under 30 seconds. The SMSC cluster handling NRW traffic is exhibiting queue depth overflow. AI agent traces the issue to a misconfigured rate limiter applied during the 11:00 UTC maintenance window. Anna Weber is coordinating with the Core team to revert the rate limiter configuration.",
+    tags: ["SMSC", "North Rhine-Westphalia", "Rate Limiter", "Queue"],
     evidence: [
       "SMSC queue depth: 128,000 messages (normal: <5,000)",
-      "ALM-8809 — SMSC-NORTH-01 queue overflow",
+      "ALM-8809 — SMSC-NRW-01 queue overflow",
       "Maintenance log: rate limiter config change 11:03 UTC",
       "Avg delivery latency: 4m 12s",
     ],
@@ -159,7 +159,7 @@ export const incidents: Incident[] = [
       },
       {
         time: "12:38",
-        event: "Assigned to Ama Asante",
+        event: "Assigned to Anna Weber",
         actor: "NOC Shift Lead",
         color: "#38bdf8",
         badge: "Assignment",
@@ -168,7 +168,7 @@ export const incidents: Incident[] = [
       {
         time: "13:05",
         event: "Root cause identified — rate limiter",
-        actor: "Ama Asante + AI Agent",
+        actor: "Anna Weber + AI Agent",
         color: "#E2008A",
         badge: "Root Cause",
         badgeBg: "rgba(226,0,138,0.15)",
@@ -176,7 +176,7 @@ export const incidents: Incident[] = [
       {
         time: "13:44",
         event: "Config revert in progress",
-        actor: "Ama Asante",
+        actor: "Anna Weber",
         color: "#f5c518",
         badge: "Mitigation",
         badgeBg: "rgba(245,197,24,0.15)",
@@ -248,9 +248,9 @@ export const incidents: Incident[] = [
     sparkTrend: [6, 5, 4, 5, 3, 3, 2, 2],
     score: "3.2",
     duration: "4h 27m",
-    assigned: "Kofi Boateng",
+    assigned: "Stefan Bauer",
     summary:
-      "IoT device registration latency on the M2M APN has been intermittently elevated, peaking at 12 seconds against a normal sub-2-second target. AI agent identifies the cause as a DNS resolver cache thrash following a nameserver config update. Kofi Boateng applied a TTL patch at 11:40 UTC. Metrics are improving and the incident is under active monitoring. No customer SLA breach at this time.",
+      "IoT device registration latency on the M2M APN has been intermittently elevated, peaking at 12 seconds against a normal sub-2-second target. AI agent identifies the cause as a DNS resolver cache thrash following a nameserver config update. Stefan Bauer applied a TTL patch at 11:40 UTC. Metrics are improving and the incident is under active monitoring. No customer SLA breach at this time.",
     tags: ["IoT", "M2M", "APN", "DNS", "Registration"],
     evidence: [
       "Avg registration latency: 12s (normal <2s)",
@@ -269,7 +269,7 @@ export const incidents: Incident[] = [
       },
       {
         time: "11:10",
-        event: "Assigned to Kofi Boateng",
+        event: "Assigned to Stefan Bauer",
         actor: "Auto-assignment rule",
         color: "#38bdf8",
         badge: "Assignment",
@@ -278,7 +278,7 @@ export const incidents: Incident[] = [
       {
         time: "11:40",
         event: "TTL patch applied — improving",
-        actor: "Kofi Boateng",
+        actor: "Stefan Bauer",
         color: "#00c896",
         badge: "Mitigation",
         badgeBg: "rgba(0,200,150,0.15)",
@@ -297,13 +297,13 @@ export const incidents: Incident[] = [
     duration: "5h 03m",
     assigned: "Lena Hoffmann",
     summary:
-      "5G NR inter-gNB handover failures are occurring at 8.4% across the Kumasi cluster, well above the 0.5% SLA threshold. AI agent pinpoints abnormal A3 event trigger parameters on a subset of gNBs following a SON policy update. Lena Hoffmann is performing RAN parameter tuning on the affected cells. A targeted rollback of the SON policy is planned if manual tuning does not resolve within 30 minutes.",
-    tags: ["5G NR", "gNB", "Handover", "SON", "Kumasi"],
+      "5G NR inter-gNB handover failures are occurring at 8.4% across the Munich cluster, well above the 0.5% SLA threshold. AI agent pinpoints abnormal A3 event trigger parameters on a subset of gNBs following a SON policy update. Lena Hoffmann is performing RAN parameter tuning on the affected cells. A targeted rollback of the SON policy is planned if manual tuning does not resolve within 30 minutes.",
+    tags: ["5G NR", "gNB", "Handover", "SON", "Munich"],
     evidence: [
       "Handover failure rate: 8.4% (SLA: <0.5%)",
       "ALM-8817 — A3 event abnormal trigger on gNB cluster 7",
       "SON policy update: 09:50 UTC",
-      "Affected cells: 34 of 218 in Kumasi cluster",
+      "Affected cells: 34 of 218 in Munich cluster",
     ],
     timeline: [
       {
@@ -513,10 +513,10 @@ export const callComposedData = [
 ];
 
 export const ticketData = [
-  { ticket: "TKT-1041", summary: "BGP route withdrawal — Tema GW", status: "In Progress" },
+  { ticket: "TKT-1041", summary: "BGP route withdrawal — Frankfurt GW", status: "In Progress" },
   { ticket: "TKT-1039", summary: "VoLTE media gateway rebalance", status: "In Progress" },
-  { ticket: "TKT-1037", summary: "SMSC rate limiter revert", status: "To Do" },
+  { ticket: "TKT-1037", summary: "SMSC rate limiter revert — NRW", status: "To Do" },
   { ticket: "TKT-1035", summary: "DEA certificate renewal", status: "To Do" },
   { ticket: "TKT-1033", summary: "DNS TTL patch — IoT APN", status: "Done" },
-  { ticket: "TKT-1031", summary: "RAN parameter tuning — Kumasi", status: "In Progress" },
+  { ticket: "TKT-1031", summary: "RAN parameter tuning — Munich", status: "In Progress" },
 ];

@@ -22,7 +22,7 @@ const CustomTooltip = ({ active, payload, label }: any) => {
           background: "var(--surface2)",
           border: "1px solid var(--border2)",
           fontFamily: "var(--font-dm-mono)",
-          color: "#ff8c00",
+          color: "var(--magenta)",
         }}
       >
         {label}: {payload[0]?.value}%
@@ -41,16 +41,24 @@ export default function DownDetectorDetailPanel() {
       className="rounded-lg p-5"
       style={{ background: "var(--surface)", border: "1px solid var(--border)" }}
     >
-      <p
-        className="text-[11px] uppercase tracking-widest mb-2"
-        style={{ color: "var(--text-muted)", fontFamily: "var(--font-dm-mono)" }}
-      >
-        Down Detector — Detail
-      </p>
+      <div className="flex items-center justify-between mb-2">
+        <p
+          className="text-[11px] uppercase tracking-widest"
+          style={{ color: "var(--text-muted)", fontFamily: "var(--font-dm-mono)" }}
+        >
+          Down Detector Data
+        </p>
+        <span
+          className="text-[11px] cursor-pointer hover:opacity-70 transition-opacity"
+          style={{ color: "var(--magenta)", fontFamily: "var(--font-dm-mono)" }}
+        >
+          View Details
+        </span>
+      </div>
 
       <p
         className="text-4xl font-bold mb-0.5"
-        style={{ color: "#ff8c00", fontFamily: "var(--font-syne)", fontWeight: 800 }}
+        style={{ color: "var(--magenta)", fontFamily: "var(--font-syne)", fontWeight: 800 }}
       >
         60%
       </p>
@@ -66,8 +74,8 @@ export default function DownDetectorDetailPanel() {
           <AreaChart data={downDetectorData} margin={{ top: 4, right: 0, left: -28, bottom: 0 }}>
             <defs>
               <linearGradient id="ddGrad" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#ff8c00" stopOpacity={0.3} />
-                <stop offset="95%" stopColor="#ff8c00" stopOpacity={0} />
+                <stop offset="5%" stopColor="#E2008A" stopOpacity={0.3} />
+                <stop offset="95%" stopColor="#E2008A" stopOpacity={0} />
               </linearGradient>
             </defs>
             <CartesianGrid stroke="rgba(255,255,255,0.04)" vertical={false} />
@@ -93,7 +101,7 @@ export default function DownDetectorDetailPanel() {
             <Area
               type="monotone"
               dataKey="score"
-              stroke="#ff8c00"
+              stroke="#E2008A"
               strokeWidth={2}
               fill="url(#ddGrad)"
               dot={false}

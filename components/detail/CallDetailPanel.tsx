@@ -20,30 +20,38 @@ export default function CallDetailPanel() {
       className="rounded-lg p-5"
       style={{ background: "var(--surface)", border: "1px solid var(--border)" }}
     >
-      <p
-        className="text-[11px] uppercase tracking-widest mb-4"
-        style={{ color: "var(--text-muted)", fontFamily: "var(--font-dm-mono)" }}
-      >
-        Call Overview
-      </p>
+      <div className="flex items-center justify-between mb-4">
+        <p
+          className="text-[11px] uppercase tracking-widest"
+          style={{ color: "var(--text-muted)", fontFamily: "var(--font-dm-mono)" }}
+        >
+          Call Overview
+        </p>
+        <span
+          className="text-[11px] cursor-pointer hover:opacity-70 transition-opacity"
+          style={{ color: "var(--magenta)", fontFamily: "var(--font-dm-mono)" }}
+        >
+          View Details
+        </span>
+      </div>
 
       {/* Stats */}
-      <div className="flex gap-4 mb-4">
+      <div className="flex gap-6 mb-4">
         <div>
-          <p className="text-[9px] uppercase tracking-widest mb-0.5" style={{ color: "var(--text-dim)", fontFamily: "var(--font-dm-mono)" }}>
-            Avg Wait
+          <p className="text-2xl font-bold mb-0.5" style={{ color: "var(--text)", fontFamily: "var(--font-syne)", fontWeight: 800 }}>
+            5 <span className="text-sm font-normal" style={{ color: "var(--text-muted)" }}>hrs</span>
           </p>
-          <p className="text-2xl font-bold" style={{ color: "var(--text)", fontFamily: "var(--font-syne)", fontWeight: 800 }}>
-            5<span className="text-sm font-normal ml-0.5" style={{ color: "var(--text-muted)" }}>hrs</span>
+          <p className="text-[10px]" style={{ color: "var(--text-dim)", fontFamily: "var(--font-dm-mono)" }}>
+            Average waiting time
           </p>
         </div>
-        <div className="w-px" style={{ background: "var(--border)" }} />
+        <div className="w-px self-stretch" style={{ background: "var(--border)" }} />
         <div>
-          <p className="text-[9px] uppercase tracking-widest mb-0.5" style={{ color: "var(--text-dim)", fontFamily: "var(--font-dm-mono)" }}>
-            Volume
-          </p>
-          <p className="text-2xl font-bold" style={{ color: "var(--magenta)", fontFamily: "var(--font-syne)", fontWeight: 800 }}>
+          <p className="text-2xl font-bold mb-0.5" style={{ color: "var(--magenta)", fontFamily: "var(--font-syne)", fontWeight: 800 }}>
             321
+          </p>
+          <p className="text-[10px]" style={{ color: "var(--text-dim)", fontFamily: "var(--font-dm-mono)" }}>
+            Volumes of calls
           </p>
         </div>
       </div>

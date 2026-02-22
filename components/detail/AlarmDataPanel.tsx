@@ -14,12 +14,20 @@ export default function AlarmDataPanel() {
       className="rounded-lg p-5"
       style={{ background: "var(--surface)", border: "1px solid var(--border)" }}
     >
-      <p
-        className="text-[11px] uppercase tracking-widest mb-4"
-        style={{ color: "var(--text-muted)", fontFamily: "var(--font-dm-mono)" }}
-      >
-        Alarm Data
-      </p>
+      <div className="flex items-center justify-between mb-4">
+        <p
+          className="text-[11px] uppercase tracking-widest"
+          style={{ color: "var(--text-muted)", fontFamily: "var(--font-dm-mono)" }}
+        >
+          Alarm Data
+        </p>
+        <span
+          className="text-[11px] cursor-pointer hover:opacity-70 transition-opacity"
+          style={{ color: "var(--magenta)", fontFamily: "var(--font-dm-mono)" }}
+        >
+          View Details
+        </span>
+      </div>
 
       {/* Stats row */}
       <div className="flex gap-4 mb-3">

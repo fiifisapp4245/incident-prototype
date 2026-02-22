@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
 import { ticketData } from "@/lib/data";
-import { SEV_COLOR } from "@/lib/utils";
 
 const pieData = [
   { name: "In Progress", value: 23, color: "#ff8c00" },
@@ -26,73 +25,77 @@ export default function TicketDetailPanel() {
       className="rounded-lg p-5"
       style={{ background: "var(--surface)", border: "1px solid var(--border)" }}
     >
-      <p
-        className="text-[11px] uppercase tracking-widest mb-4"
-        style={{ color: "var(--text-muted)", fontFamily: "var(--font-dm-mono)" }}
-      >
-        Ticket Flow
-      </p>
+      {/* Header */}
+      <div className="flex items-center justify-between mb-4">
+        <p
+          className="text-[11px] uppercase tracking-widest"
+          style={{ color: "var(--text-muted)", fontFamily: "var(--font-dm-mono)" }}
+        >
+          Ticket Flow
+        </p>
+        <span
+          className="text-[11px] cursor-pointer hover:opacity-70 transition-opacity"
+          style={{ color: "var(--magenta)", fontFamily: "var(--font-dm-mono)" }}
+        >
+          View Details
+        </span>
+      </div>
 
-      <div className="flex gap-8 mb-6">
-        {/* Donut */}
-        <div className="relative shrink-0" style={{ width: 180, height: 180 }}>
-          {mounted && (
-            <ResponsiveContainer width="100%" height="100%">
-              <PieChart>
-                <Pie
-                  data={pieData}
-                  cx="50%"
-                  cy="50%"
-                  innerRadius={58}
-                  outerRadius={88}
-                  dataKey="value"
-                  strokeWidth={0}
-                  animationDuration={800}
-                >
-                  {pieData.map((d, i) => (
-                    <Cell key={i} fill={d.color} />
-                  ))}
-                </Pie>
-              </PieChart>
-            </ResponsiveContainer>
-          )}
-          {/* Center */}
-          <div
-            className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none"
-          >
-            <span
-              className="text-2xl font-extrabold leading-none"
-              style={{ color: "var(--text)", fontFamily: "var(--font-syne)", fontWeight: 800 }}
+      {/* Stats row */}
+      <div className="flex gap-6 mb-4">
+        {pieData.map((d) => (
+          <div key={d.name}>
+            <p
+              className="text-2xl font-extrabold leading-none mb-0.5"
+              style={{ color: d.color, fontFamily: "var(--font-syne)", fontWeight: 800 }}
             >
-              87
-            </span>
-            <span
+              {d.value}
+            </p>
+            <p
               className="text-[10px]"
               style={{ color: "var(--text-dim)", fontFamily: "var(--font-dm-mono)" }}
             >
-              Tickets
-            </span>
+              {d.name}
+            </p>
           </div>
-        </div>
+        ))}
+      </div>
 
-        {/* Stats */}
-        <div className="flex flex-col gap-4 justify-center">
-          {pieData.map((d) => (
-            <div key={d.name}>
-              <p
-                className="text-[11px] uppercase tracking-widest mb-0.5"
-                style={{ color: "var(--text-dim)", fontFamily: "var(--font-dm-mono)" }}
+      {/* Donut chart */}
+      <div className="relative mx-auto mb-4" style={{ width: 160, height: 160 }}>
+        {mounted && (
+          <ResponsiveContainer width="100%" height="100%">
+            <PieChart>
+              <Pie
+                data={pieData}
+                cx="50%"
+                cy="50%"
+                innerRadius={50}
+                outerRadius={78}
+                dataKey="value"
+                strokeWidth={0}
+                animationDuration={800}
               >
-                {d.name}
-              </p>
-              <p
-                className="text-3xl font-extrabold"
-                style={{ color: d.color, fontFamily: "var(--font-syne)", fontWeight: 800 }}
-              >
-                {d.value}
-              </p>
-            </div>
-          ))}
+                {pieData.map((d, i) => (
+                  <Cell key={i} fill={d.color} />
+                ))}
+              </Pie>
+            </PieChart>
+          </ResponsiveContainer>
+        )}
+        <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+          <span
+            className="text-2xl font-extrabold leading-none"
+            style={{ color: "var(--text)", fontFamily: "var(--font-syne)", fontWeight: 800 }}
+          >
+            87
+          </span>
+          <span
+            className="text-[10px]"
+            style={{ color: "var(--text-dim)", fontFamily: "var(--font-dm-mono)" }}
+          >
+            Tickets
+          </span>
         </div>
       </div>
 

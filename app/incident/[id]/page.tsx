@@ -18,24 +18,25 @@ export default function DetailPage({ params }: Props) {
 
   return (
     <div className="px-5 py-5 max-w-[1600px] mx-auto space-y-4">
-      {/* Incident Header */}
       <IncidentHeader incident={incident} />
 
-      {/* Row 1: AI Summary + Timeline */}
-      <div className="grid grid-cols-2 gap-4">
-        <ClassificationSummary incident={incident} />
-        <LifecycleTimeline incident={incident} />
-      </div>
+      <div className="flex gap-4 items-start">
+        {/* Left column — AI summary + 2×2 signal panels */}
+        <div className="flex-1 min-w-0 flex flex-col gap-4">
+          <ClassificationSummary incident={incident} />
+          <div className="grid grid-cols-2 gap-4">
+            <AlarmDataPanel />
+            <CallDetailPanel />
+            <DownDetectorDetailPanel />
+            <TicketDetailPanel />
+          </div>
+        </div>
 
-      {/* Row 2: Signal Data — 3 columns */}
-      <div className="grid grid-cols-3 gap-4">
-        <AlarmDataPanel />
-        <CallDetailPanel />
-        <DownDetectorDetailPanel />
+        {/* Right column — Lifecycle Timeline (full height) */}
+        <div className="shrink-0 w-[360px]">
+          <LifecycleTimeline incident={incident} />
+        </div>
       </div>
-
-      {/* Row 3: Ticket Flow — full width */}
-      <TicketDetailPanel />
     </div>
   );
 }

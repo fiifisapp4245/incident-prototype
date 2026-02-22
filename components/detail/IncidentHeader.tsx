@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
 import { Incident } from "@/types/incident";
 import { SEV_COLOR, SEV_BG, STATUS_COLOR } from "@/lib/utils";
 
@@ -15,16 +14,6 @@ export default function IncidentHeader({ incident }: Props) {
 
   return (
     <div>
-      {/* Back link */}
-      <Link
-        href="/"
-        className="inline-flex items-center gap-2 mb-4 text-[12px] transition-opacity hover:opacity-70"
-        style={{ color: "var(--text-muted)", fontFamily: "var(--font-dm-mono)" }}
-      >
-        <ArrowLeft size={13} />
-        Back to Overview
-      </Link>
-
       {/* Breadcrumb */}
       <div
         className="flex items-center gap-2 text-[11px] mb-4"
@@ -33,8 +22,6 @@ export default function IncidentHeader({ incident }: Props) {
         <Link href="/" className="hover:text-white transition-colors">Overview</Link>
         <span>›</span>
         <span style={{ color: "var(--text-muted)" }}>{incident.id}</span>
-        <span>·</span>
-        <span style={{ color: "var(--text)" }} className="truncate">{incident.title}</span>
       </div>
 
       {/* Header card */}
@@ -42,8 +29,6 @@ export default function IncidentHeader({ incident }: Props) {
         className="rounded-lg p-6 relative overflow-hidden"
         style={{
           background: "var(--surface)",
-          border: "1px solid var(--border)",
-          borderTop: `3px solid ${sevColor}`,
         }}
       >
         {/* Gradient top wash */}

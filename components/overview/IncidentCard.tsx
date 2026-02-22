@@ -118,13 +118,6 @@ export default function IncidentCard({ incident }: Props) {
         >
           {incident.status}
         </span>
-        <span className="flex-1" />
-        <span
-          className="text-[11px] tabular-nums"
-          style={{ color: "var(--text-dim)", fontFamily: "var(--font-dm-mono)" }}
-        >
-          {incident.duration}
-        </span>
       </div>
     </div>
   );
