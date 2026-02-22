@@ -13,6 +13,7 @@ export interface Incident {
   service: string;
   sev: "Critical" | "Major" | "Minor";
   status: "Active" | "In Progress" | "Monitoring" | "Resolved";
+  date: string;
   time: string;
   sparkTrend: number[];
   score: string;

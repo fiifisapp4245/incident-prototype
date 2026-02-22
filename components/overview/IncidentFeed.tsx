@@ -21,6 +21,8 @@ export default function IncidentFeed({ filters }: Props) {
     return incidents.filter((inc: Incident) => {
       if (filters.severity !== "All" && inc.sev !== filters.severity) return false;
       if (filters.status !== "All" && inc.status !== filters.status) return false;
+      if (filters.startDate && inc.date < filters.startDate) return false;
+      if (filters.endDate && inc.date > filters.endDate) return false;
       return true;
     });
   }, [filters]);

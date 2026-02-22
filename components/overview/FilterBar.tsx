@@ -2,7 +2,7 @@
 
 import { Dispatch, SetStateAction } from "react";
 import { format } from "date-fns";
-import { Calendar as CalendarIcon } from "lucide-react";
+import { Calendar as CalendarIcon, X } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -141,7 +141,15 @@ function DateField({
   );
 }
 
+const defaultFilters: FilterState = { severity: "All", status: "All", startDate: "", endDate: "" };
+
 export default function FilterBar({ filters, setFilters }: Props) {
+  const isFiltered =
+    filters.severity !== "All" ||
+    filters.status !== "All" ||
+    filters.startDate !== "" ||
+    filters.endDate !== "";
+
   return (
     <div
       className="flex items-end gap-5 px-6 py-5 rounded-xl"
@@ -184,6 +192,22 @@ export default function FilterBar({ filters, setFilters }: Props) {
         value={filters.endDate}
         onChange={(v) => setFilters((f) => ({ ...f, endDate: v }))}
       />
+
+      {isFiltered && (
+        <button
+          onClick={() => setFilters(defaultFilters)}
+          className="flex items-center gap-1.5 shrink-0 px-3 h-[42px] rounded-lg text-[12px] transition-opacity hover:opacity-70"
+          style={{
+            background: "rgba(226,0,138,0.1)",
+            border: "1px solid rgba(226,0,138,0.25)",
+            color: "var(--magenta)",
+            fontFamily: "var(--font-dm-mono)",
+          }}
+        >
+          <X size={12} />
+          Clear
+        </button>
+      )}
     </div>
   );
 }

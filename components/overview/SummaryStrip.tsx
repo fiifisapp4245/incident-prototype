@@ -1,39 +1,43 @@
 "use client";
 
+import { useMemo } from "react";
 import { ArrowUp, ArrowDown } from "lucide-react";
+import { incidents } from "@/lib/data";
+import { Incident } from "@/types/incident";
 
-const cards = [
-  {
-    label: "Active Incidents",
-    value: 14,
-    accentColor: "#38bdf8",
-    trend: 3,
-    trendDir: "up" as const,
-  },
-  {
-    label: "Critical",
-    value: 3,
-    accentColor: "#ff3b5c",
-    trend: 1,
-    trendDir: "up" as const,
-  },
-  {
-    label: "Major",
-    value: 6,
-    accentColor: "#ff8c00",
-    trend: 1,
-    trendDir: "up" as const,
-  },
-  {
-    label: "Minor",
-    value: 5,
-    accentColor: "#f5c518",
-    trend: 1,
-    trendDir: "down" as const,
-  },
-];
+interface FilterState {
+  severity: string;
+  status: string;
+  startDate: string;
+  endDate: string;
+}
 
-export default function SummaryStrip() {
+interface Props {
+  filters: FilterState;
+}
+
+export default function SummaryStrip({ filters }: Props) {
+  const filtered = useMemo(() => {
+    return incidents.filter((inc: Incident) => {
+      if (filters.severity !== "All" && inc.sev !== filters.severity) return false;
+      if (filters.status !== "All" && inc.status !== filters.status) return false;
+      if (filters.startDate && inc.date < filters.startDate) return false;
+      if (filters.endDate && inc.date > filters.endDate) return false;
+      return true;
+    });
+  }, [filters]);
+
+  const critical = filtered.filter((i) => i.sev === "Critical").length;
+  const major    = filtered.filter((i) => i.sev === "Major").length;
+  const minor    = filtered.filter((i) => i.sev === "Minor").length;
+
+  const cards = [
+    { label: "Active Incidents", value: filtered.length, accentColor: "#38bdf8", trend: 3,  trendDir: "up"   as const },
+    { label: "Critical",         value: critical,         accentColor: "#ff3b5c", trend: 1,  trendDir: "up"   as const },
+    { label: "Major",            value: major,            accentColor: "#ff8c00", trend: 1,  trendDir: "up"   as const },
+    { label: "Minor",            value: minor,            accentColor: "#f5c518", trend: 1,  trendDir: "down" as const },
+  ];
+
   return (
     <div className="grid grid-cols-4 gap-5">
       {cards.map((c, i) => (
@@ -45,7 +49,6 @@ export default function SummaryStrip() {
             border: "1px solid var(--border)",
           }}
         >
-          {/* Label */}
           <p
             className="text-[11px] uppercase tracking-widest mb-4"
             style={{ color: "var(--text-muted)", fontFamily: "var(--font-dm-mono)" }}
@@ -53,7 +56,6 @@ export default function SummaryStrip() {
             {c.label}
           </p>
 
-          {/* Value — white, hierarchy via size + weight */}
           <p
             className="text-6xl leading-none mb-5"
             style={{
@@ -65,7 +67,6 @@ export default function SummaryStrip() {
             {c.value}
           </p>
 
-          {/* Trend row */}
           <div className="flex items-center gap-1.5 mt-auto">
             <div
               className="flex items-center justify-center w-5 h-5 rounded-full shrink-0"

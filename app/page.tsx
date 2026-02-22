@@ -36,7 +36,7 @@ export default function OverviewPage() {
       <FilterBar filters={filters} setFilters={setFilters} />
 
       {/* Summary Strip */}
-      <SummaryStrip />
+      <SummaryStrip filters={filters} />
 
       {/* Row 2: Call Volume · Down Detector · Ticket Flow */}
       <div className="grid grid-cols-3 gap-5">
