@@ -1,0 +1,118 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-syne: var(--font-ibm-sans), 'IBM Plex Sans', sans-serif;
+  --font-dm-mono: var(--font-ibm-sans), 'IBM Plex Sans', sans-serif;
+  --magenta: #E2008A;
+  /* shadcn component tokens */
+  --background: #16161f;
+  --foreground: #f0f0f5;
+  --popover: #111118;
+  --popover-foreground: #f0f0f5;
+  --primary: #E2008A;
+  --primary-foreground: #ffffff;
+  --muted: #1c1c28;
+  --muted-foreground: #9898b0;
+  --accent: #1c1c28;
+  --accent-foreground: #f0f0f5;
+  --input: rgba(255, 255, 255, 0.12);
+  --ring: #E2008A;
+  --bg: #0a0a0f;
+  --surface: #111118;
+  --surface2: #16161f;
+  --surface3: #1c1c28;
+  --border: rgba(255, 255, 255, 0.07);
+  --border2: rgba(255, 255, 255, 0.12);
+  --text: #f0f0f5;
+  --text-muted: #d4d4e4;
+  --text-dim: #9898b0;
+  --critical: #ff3b5c;
+  --major: #ff8c00;
+  --minor: #f5c518;
+  --resolved: #00c896;
+  --info: #38bdf8;
+}
+
+html {
+  color-scheme: dark;
+}
+
+html,
+body {
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: var(--font-ibm-sans), 'IBM Plex Sans', sans-serif;
+}
+
+body {
+  background-image:
+    repeating-linear-gradient(
+      rgba(255, 255, 255, 0.012) 0px,
+      rgba(255, 255, 255, 0.012) 1px,
+      transparent 1px,
+      transparent 40px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.012) 0px,
+      rgba(255, 255, 255, 0.012) 1px,
+      transparent 1px,
+      transparent 40px
+    );
+}
+
+/* Thin custom scrollbar */
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+::-webkit-scrollbar-track {
+  background: var(--surface);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--text-dim);
+  border-radius: 2px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+
+/* Stagger animation delays */
+.delay-0 { animation-delay: 0ms; }
+.delay-1 { animation-delay: 80ms; }
+.delay-2 { animation-delay: 160ms; }
+.delay-3 { animation-delay: 240ms; }
+.delay-4 { animation-delay: 320ms; }
+.delay-5 { animation-delay: 400ms; }
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-up {
+  animation: fadeUp 0.5s ease forwards;
+  opacity: 0;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.85); }
+}
+
+.pulse-dot {
+  animation: pulse-dot 1.8s ease-in-out infinite;
+}
+
+/* Progress bar transition */
+.progress-bar {
+  transition: width 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
