@@ -12,7 +12,7 @@ export default function LifecycleTimeline({ incident }: Props) {
 
   return (
     <div
-      className="rounded-lg p-5"
+      className="rounded-lg p-5 h-full"
       style={{ background: "var(--surface)", border: "1px solid var(--border)" }}
     >
       <div className="flex items-center justify-between mb-5">

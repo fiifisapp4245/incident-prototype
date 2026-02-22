@@ -9,9 +9,11 @@ interface Props {
 }
 
 export default function ClassificationSummary({ incident }: Props) {
+  const sevColor = SEV_COLOR[incident.sev];
+
   return (
     <div
-      className="rounded-lg p-5"
+      className="rounded-lg p-5 h-full"
       style={{ background: "var(--surface)", border: "1px solid var(--border)" }}
     >
       {/* Panel title + badge */}
@@ -40,7 +42,7 @@ export default function ClassificationSummary({ incident }: Props) {
         className="px-4 py-4 rounded mb-5"
         style={{
           background: "var(--surface2)",
-          borderLeft: "3px solid var(--magenta)",
+          borderLeft: `3px solid ${sevColor}`,
           fontFamily: "var(--font-dm-mono)",
           color: "var(--text-muted)",
           lineHeight: "1.65",

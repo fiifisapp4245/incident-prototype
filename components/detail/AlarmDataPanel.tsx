@@ -54,16 +54,16 @@ export default function AlarmDataPanel() {
             <AreaChart data={alarmChartData} margin={{ top: 0, right: 0, left: 0, bottom: 0 }}>
               <defs>
                 <linearGradient id="aGradC" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#ff3b5c" stopOpacity={0.2} />
+                  <stop offset="5%" stopColor="#ff3b5c" stopOpacity={0.35} />
                   <stop offset="95%" stopColor="#ff3b5c" stopOpacity={0} />
                 </linearGradient>
                 <linearGradient id="aGradM" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#ff8c00" stopOpacity={0.15} />
+                  <stop offset="5%" stopColor="#ff8c00" stopOpacity={0.35} />
                   <stop offset="95%" stopColor="#ff8c00" stopOpacity={0} />
                 </linearGradient>
               </defs>
-              <Area type="monotone" dataKey="critical" stroke="#ff3b5c" strokeWidth={1.5} fill="url(#aGradC)" dot={false} animationDuration={800} />
-              <Area type="monotone" dataKey="major" stroke="#ff8c00" strokeWidth={1.5} fill="url(#aGradM)" dot={false} animationDuration={800} />
+              <Area type="monotone" dataKey="major" stackId="a" stroke="#ff8c00" strokeWidth={1.5} fill="url(#aGradM)" dot={false} animationDuration={800} />
+              <Area type="monotone" dataKey="critical" stackId="a" stroke="#ff3b5c" strokeWidth={1.5} fill="url(#aGradC)" dot={false} animationDuration={800} />
             </AreaChart>
           </ResponsiveContainer>
         ) : (
