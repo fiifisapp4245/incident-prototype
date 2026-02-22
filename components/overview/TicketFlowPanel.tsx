@@ -1,14 +1,27 @@
 "use client";
 
-import { PieChart, Pie, Cell } from "recharts";
+import { PieChart, Pie } from "recharts";
+import {
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+  type ChartConfig,
+} from "@/components/ui/chart";
 
-const data = [
-  { name: "To Do", value: 23, color: "#ff3b5c" },
-  { name: "In Progress", value: 52, color: "#ff8c00" },
-  { name: "Done", value: 12, color: "#00c896" },
+const chartConfig = {
+  value:      { label: "Tickets" },
+  toDo:       { label: "To Do",       color: "#ff3b5c" },
+  inProgress: { label: "In Progress", color: "#ff8c00" },
+  done:       { label: "Done",        color: "#00c896" },
+} satisfies ChartConfig;
+
+const pieData = [
+  { status: "toDo",       name: "To Do",       value: 23, fill: "var(--color-toDo)",       color: "#ff3b5c" },
+  { status: "inProgress", name: "In Progress", value: 52, fill: "var(--color-inProgress)", color: "#ff8c00" },
+  { status: "done",       name: "Done",        value: 12, fill: "var(--color-done)",        color: "#00c896" },
 ];
 
-const total = data.reduce((s, d) => s + d.value, 0);
+const total = pieData.reduce((s, d) => s + d.value, 0);
 
 export default function TicketFlowPanel() {
   return (
@@ -26,22 +39,22 @@ export default function TicketFlowPanel() {
       <div className="flex items-center gap-6 flex-1">
         {/* Donut with center label */}
         <div className="relative shrink-0" style={{ width: 160, height: 160 }}>
-          <PieChart width={160} height={160}>
-            <Pie
-              data={data}
-              cx={80}
-              cy={80}
-              innerRadius={52}
-              outerRadius={72}
-              dataKey="value"
-              strokeWidth={0}
-              animationDuration={800}
-            >
-              {data.map((d, i) => (
-                <Cell key={i} fill={d.color} />
-              ))}
-            </Pie>
-          </PieChart>
+          <ChartContainer config={chartConfig} className="w-[160px] h-[160px]">
+            <PieChart>
+              <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
+              <Pie
+                data={pieData}
+                cx="50%"
+                cy="50%"
+                innerRadius={52}
+                outerRadius={72}
+                dataKey="value"
+                nameKey="status"
+                strokeWidth={0}
+                animationDuration={800}
+              />
+            </PieChart>
+          </ChartContainer>
           {/* Center label */}
           <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
             <span
@@ -63,8 +76,8 @@ export default function TicketFlowPanel() {
 
         {/* Legend */}
         <div className="flex flex-col gap-4 flex-1">
-          {data.map((d) => (
-            <div key={d.name}>
+          {pieData.map((d) => (
+            <div key={d.status}>
               <div className="flex items-center justify-between mb-1">
                 <div className="flex items-center gap-2">
                   <span

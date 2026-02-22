@@ -1,37 +1,30 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { PieChart, Pie, Cell, Tooltip } from "recharts";
+import { PieChart, Pie } from "recharts";
+import {
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+  type ChartConfig,
+} from "@/components/ui/chart";
 
-const data = [
-  { name: "Critical", value: 3, color: "#ff3b5c" },
-  { name: "Major", value: 6, color: "#ff8c00" },
-  { name: "Minor", value: 5, color: "#f5c518" },
-  { name: "Resolved", value: 12, color: "#00c896" },
+const chartConfig = {
+  value:    { label: "Incidents" },
+  critical: { label: "Critical", color: "#ff3b5c" },
+  major:    { label: "Major",    color: "#ff8c00" },
+  minor:    { label: "Minor",    color: "#f5c518" },
+  resolved: { label: "Resolved", color: "#00c896" },
+} satisfies ChartConfig;
+
+const pieData = [
+  { status: "critical", name: "Critical", value: 3,  fill: "var(--color-critical)", color: "#ff3b5c" },
+  { status: "major",    name: "Major",    value: 6,  fill: "var(--color-major)",    color: "#ff8c00" },
+  { status: "minor",    name: "Minor",    value: 5,  fill: "var(--color-minor)",    color: "#f5c518" },
+  { status: "resolved", name: "Resolved", value: 12, fill: "var(--color-resolved)", color: "#00c896" },
 ];
 
-const total = data.reduce((s, d) => s + d.value, 0);
-
-const CustomTooltip = ({ active, payload }: any) => {
-  if (active && payload?.length) {
-    const d = payload[0];
-    return (
-      <div
-        className="px-3 py-2 rounded text-[11px]"
-        style={{
-          background: "var(--surface2)",
-          border: "1px solid var(--border2)",
-          fontFamily: "var(--font-dm-mono)",
-          color: "var(--text)",
-        }}
-      >
-        <span style={{ color: d.payload.color }}>{d.name}</span>: {d.value} (
-        {Math.round((d.value / total) * 100)}%)
-      </div>
-    );
-  }
-  return null;
-};
+const total = pieData.reduce((s, d) => s + d.value, 0);
 
 export default function SeverityDonut() {
   const [animated, setAnimated] = useState(false);
@@ -64,23 +57,22 @@ export default function SeverityDonut() {
       <div className="flex items-center gap-6 flex-1">
         {/* Donut with center label */}
         <div className="relative shrink-0" style={{ width: 180, height: 180 }}>
-          <PieChart width={180} height={180}>
-            <Pie
-              data={data}
-              cx={90}
-              cy={90}
-              innerRadius={58}
-              outerRadius={86}
-              dataKey="value"
-              strokeWidth={0}
-              animationDuration={800}
-            >
-              {data.map((d, i) => (
-                <Cell key={i} fill={d.color} />
-              ))}
-            </Pie>
-            <Tooltip content={<CustomTooltip />} />
-          </PieChart>
+          <ChartContainer config={chartConfig} className="w-[180px] h-[180px]">
+            <PieChart>
+              <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
+              <Pie
+                data={pieData}
+                cx="50%"
+                cy="50%"
+                innerRadius={58}
+                outerRadius={86}
+                dataKey="value"
+                nameKey="status"
+                strokeWidth={0}
+                animationDuration={800}
+              />
+            </PieChart>
+          </ChartContainer>
           {/* Center label */}
           <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
             <span
@@ -102,10 +94,10 @@ export default function SeverityDonut() {
 
         {/* Legend */}
         <div className="flex flex-col gap-4 flex-1">
-          {data.map((d) => {
+          {pieData.map((d) => {
             const pct = Math.round((d.value / total) * 100);
             return (
-              <div key={d.name}>
+              <div key={d.status}>
                 <div className="flex items-center justify-between mb-1.5">
                   <div className="flex items-center gap-2">
                     <span

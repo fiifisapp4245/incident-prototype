@@ -24,7 +24,7 @@ const chartConfig = {
 export default function AlarmDataPanel() {
   return (
     <div
-      className="rounded-lg p-5"
+      className="rounded-lg p-5 flex flex-col"
       style={{ background: "var(--surface)", border: "1px solid var(--border)" }}
     >
       {/* Header */}
@@ -62,8 +62,8 @@ export default function AlarmDataPanel() {
       </div>
 
       {/* Stacked area chart */}
-      <div className="mb-4">
-        <ChartContainer config={chartConfig} className="h-[80px] w-full">
+      <div className="flex-1 min-h-0 mb-4">
+        <ChartContainer config={chartConfig} className="h-full w-full">
           <AreaChart
             data={alarmChartData}
             margin={{ top: 0, right: 0, left: 0, bottom: 0 }}
