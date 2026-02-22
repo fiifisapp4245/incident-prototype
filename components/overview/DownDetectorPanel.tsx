@@ -1,6 +1,7 @@
 "use client";
 
 import { AlertTriangle } from "lucide-react";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 const score = 62.5;
 const SEGMENTS = 30;
@@ -90,21 +91,23 @@ export default function DownDetectorPanel() {
       </div>
 
       {/* Warning badge */}
-      <div
-        className="flex items-center gap-2.5 px-3 py-2.5 rounded-lg mt-auto"
-        style={{
-          background: "rgba(255,140,0,0.08)",
-          border: "1px solid rgba(255,140,0,0.2)",
-        }}
+      <Alert
+        className="mt-auto rounded-lg border-[rgba(255,140,0,0.25)] bg-[rgba(255,140,0,0.08)] [&>svg]:text-[#ff8c00]"
       >
-        <AlertTriangle size={13} style={{ color: "#ff8c00", flexShrink: 0 }} />
-        <span
+        <AlertTriangle size={13} />
+        <AlertTitle
+          className="text-[11px] font-semibold"
+          style={{ color: "#ff8c00", fontFamily: "var(--font-dm-mono)" }}
+        >
+          Down Detector
+        </AlertTitle>
+        <AlertDescription
           className="text-[11px]"
           style={{ color: "#ff8c00", fontFamily: "var(--font-dm-mono)" }}
         >
-          Elevated — above baseline threshold
-        </span>
-      </div>
+          Elevated above the baseline threshold
+        </AlertDescription>
+      </Alert>
     </div>
   );
 }
