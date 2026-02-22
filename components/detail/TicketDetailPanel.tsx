@@ -1,14 +1,26 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
+import { Pie, PieChart } from "recharts";
 import { ticketData } from "@/lib/data";
+import {
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+  type ChartConfig,
+} from "@/components/ui/chart";
 
 const pieData = [
-  { name: "In Progress", value: 23, color: "#ff8c00" },
-  { name: "To Do", value: 64, color: "#ff3b5c" },
-  { name: "Done", value: 12, color: "#00c896" },
+  { status: "inProgress", label: "In Progress", value: 23, fill: "var(--color-inProgress)" },
+  { status: "toDo",       label: "To Do",        value: 64, fill: "var(--color-toDo)" },
+  { status: "done",       label: "Done",         value: 12, fill: "var(--color-done)" },
 ];
+
+const chartConfig = {
+  value: { label: "Tickets" },
+  inProgress: { label: "In Progress", color: "#ff8c00" },
+  toDo:       { label: "To Do",       color: "#ff3b5c" },
+  done:       { label: "Done",        color: "#00c896" },
+} satisfies ChartConfig;
 
 const statusColor: Record<string, string> = {
   "In Progress": "#ff8c00",
@@ -17,9 +29,6 @@ const statusColor: Record<string, string> = {
 };
 
 export default function TicketDetailPanel() {
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => setMounted(true), []);
-
   return (
     <div
       className="rounded-lg p-5"
@@ -44,10 +53,10 @@ export default function TicketDetailPanel() {
       {/* Stats row */}
       <div className="flex gap-6 mb-4">
         {pieData.map((d) => (
-          <div key={d.name}>
+          <div key={d.status}>
             <p
               className="text-2xl font-extrabold leading-none mb-0.5"
-              style={{ color: d.color, fontFamily: "var(--font-syne)", fontWeight: 800 }}
+              style={{ color: `var(--color-${d.status})`, fontFamily: "var(--font-syne)", fontWeight: 800 }}
             >
               {d.value}
             </p>
@@ -55,35 +64,30 @@ export default function TicketDetailPanel() {
               className="text-[10px]"
               style={{ color: "var(--text-dim)", fontFamily: "var(--font-dm-mono)" }}
             >
-              {d.name}
+              {d.label}
             </p>
           </div>
         ))}
       </div>
 
       {/* Donut chart */}
-      <div className="relative mx-auto mb-4" style={{ width: 160, height: 160 }}>
-        {mounted && (
-          <ResponsiveContainer width="100%" height="100%">
-            <PieChart>
-              <Pie
-                data={pieData}
-                cx="50%"
-                cy="50%"
-                innerRadius={50}
-                outerRadius={78}
-                dataKey="value"
-                strokeWidth={0}
-                animationDuration={800}
-              >
-                {pieData.map((d, i) => (
-                  <Cell key={i} fill={d.color} />
-                ))}
-              </Pie>
-            </PieChart>
-          </ResponsiveContainer>
-        )}
-        <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+      <div className="relative mb-4">
+        <ChartContainer config={chartConfig} className="mx-auto aspect-square max-h-[180px]">
+          <PieChart>
+            <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
+            <Pie
+              data={pieData}
+              dataKey="value"
+              nameKey="status"
+              innerRadius={52}
+              outerRadius={80}
+              strokeWidth={0}
+              animationDuration={800}
+            />
+          </PieChart>
+        </ChartContainer>
+        {/* Centre label */}
+        <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
           <span
             className="text-2xl font-extrabold leading-none"
             style={{ color: "var(--text)", fontFamily: "var(--font-syne)", fontWeight: 800 }}
@@ -113,12 +117,8 @@ export default function TicketDetailPanel() {
         <tbody>
           {ticketData.map((row, i) => (
             <tr key={i} style={{ borderBottom: "1px solid var(--border)" }}>
-              <td className="py-2 pr-4" style={{ color: "var(--text-muted)" }}>
-                {row.ticket}
-              </td>
-              <td className="py-2 pr-4" style={{ color: "var(--text-muted)" }}>
-                {row.summary}
-              </td>
+              <td className="py-2 pr-4" style={{ color: "var(--text-muted)" }}>{row.ticket}</td>
+              <td className="py-2 pr-4" style={{ color: "var(--text-muted)" }}>{row.summary}</td>
               <td className="py-2">
                 <span
                   className="px-2 py-0.5 rounded text-[10px]"

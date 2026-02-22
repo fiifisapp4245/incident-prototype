@@ -1,46 +1,28 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import {
-  AreaChart,
-  Area,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  ReferenceLine,
-  ResponsiveContainer,
-  Tooltip,
-} from "recharts";
+import { Area, AreaChart, CartesianGrid, ReferenceLine, XAxis, YAxis } from "recharts";
 import { downDetectorData } from "@/lib/data";
+import {
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+  type ChartConfig,
+} from "@/components/ui/chart";
 
-const CustomTooltip = ({ active, payload, label }: any) => {
-  if (active && payload?.length) {
-    return (
-      <div
-        className="px-3 py-2 rounded text-[11px]"
-        style={{
-          background: "var(--surface2)",
-          border: "1px solid var(--border2)",
-          fontFamily: "var(--font-dm-mono)",
-          color: "var(--magenta)",
-        }}
-      >
-        {label}: {payload[0]?.value}%
-      </div>
-    );
-  }
-  return null;
-};
+const chartConfig = {
+  score: {
+    label: "User Score",
+    color: "#E2008A",
+  },
+} satisfies ChartConfig;
 
 export default function DownDetectorDetailPanel() {
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => setMounted(true), []);
-
   return (
     <div
-      className="rounded-lg p-5"
+      className="rounded-lg p-5 flex flex-col"
       style={{ background: "var(--surface)", border: "1px solid var(--border)" }}
     >
+      {/* Header */}
       <div className="flex items-center justify-between mb-2">
         <p
           className="text-[11px] uppercase tracking-widest"
@@ -69,49 +51,49 @@ export default function DownDetectorDetailPanel() {
         Current user score
       </p>
 
-      {mounted ? (
-        <ResponsiveContainer width="100%" height={110}>
-          <AreaChart data={downDetectorData} margin={{ top: 4, right: 0, left: -28, bottom: 0 }}>
-            <defs>
-              <linearGradient id="ddGrad" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#E2008A" stopOpacity={0.3} />
-                <stop offset="95%" stopColor="#E2008A" stopOpacity={0} />
-              </linearGradient>
-            </defs>
-            <CartesianGrid stroke="rgba(255,255,255,0.04)" vertical={false} />
-            <XAxis
-              dataKey="time"
-              tick={{ fill: "#6b6b80", fontSize: 9, fontFamily: "var(--font-dm-mono)" }}
-              axisLine={false}
-              tickLine={false}
-            />
-            <YAxis
-              domain={[0, 100]}
-              tick={{ fill: "#6b6b80", fontSize: 9, fontFamily: "var(--font-dm-mono)" }}
-              axisLine={false}
-              tickLine={false}
-              tickFormatter={(v) => `${v}%`}
-            />
-            <Tooltip content={<CustomTooltip />} />
-            <ReferenceLine
-              y={50}
-              stroke="rgba(255,255,255,0.15)"
-              strokeDasharray="4 3"
-            />
-            <Area
-              type="monotone"
-              dataKey="score"
-              stroke="#E2008A"
-              strokeWidth={2}
-              fill="url(#ddGrad)"
-              dot={false}
-              animationDuration={800}
-            />
-          </AreaChart>
-        </ResponsiveContainer>
-      ) : (
-        <div style={{ height: 110 }} />
-      )}
+      <ChartContainer config={chartConfig} className="flex-1 w-full min-h-0">
+        <AreaChart data={downDetectorData} margin={{ top: 4, right: 0, left: -16, bottom: 0 }}>
+          <defs>
+            <linearGradient id="ddGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="5%" stopColor="var(--color-score)" stopOpacity={0.35} />
+              <stop offset="95%" stopColor="var(--color-score)" stopOpacity={0} />
+            </linearGradient>
+          </defs>
+          <CartesianGrid vertical={false} stroke="rgba(255,255,255,0.04)" />
+          <XAxis
+            dataKey="time"
+            tickLine={false}
+            axisLine={false}
+            tick={{ fill: "#6b6b80", fontSize: 9, fontFamily: "var(--font-dm-mono)" }}
+            tickMargin={4}
+          />
+          <YAxis
+            domain={[0, 100]}
+            tickLine={false}
+            axisLine={false}
+            tick={{ fill: "#6b6b80", fontSize: 9, fontFamily: "var(--font-dm-mono)" }}
+            tickFormatter={(v) => `${v}%`}
+          />
+          <ChartTooltip
+            cursor={false}
+            content={<ChartTooltipContent indicator="dot" />}
+          />
+          <ReferenceLine
+            y={50}
+            stroke="rgba(255,255,255,0.15)"
+            strokeDasharray="4 3"
+          />
+          <Area
+            dataKey="score"
+            type="natural"
+            fill="url(#ddGrad)"
+            stroke="var(--color-score)"
+            strokeWidth={2}
+            dot={false}
+            animationDuration={800}
+          />
+        </AreaChart>
+      </ChartContainer>
     </div>
   );
 }

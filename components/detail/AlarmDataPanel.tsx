@@ -1,19 +1,33 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { AreaChart, Area, ResponsiveContainer } from "recharts";
+import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
 import { alarmChartData, alarmTableData } from "@/lib/data";
-import { STATUS_COLOR, SEV_COLOR } from "@/lib/utils";
+import { SEV_COLOR } from "@/lib/utils";
+import {
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+  type ChartConfig,
+} from "@/components/ui/chart";
+
+const chartConfig = {
+  major: {
+    label: "Major",
+    color: "#ff8c00",
+  },
+  critical: {
+    label: "Critical",
+    color: "#ff3b5c",
+  },
+} satisfies ChartConfig;
 
 export default function AlarmDataPanel() {
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => setMounted(true), []);
-
   return (
     <div
       className="rounded-lg p-5"
       style={{ background: "var(--surface)", border: "1px solid var(--border)" }}
     >
+      {/* Header */}
       <div className="flex items-center justify-between mb-4">
         <p
           className="text-[11px] uppercase tracking-widest"
@@ -47,28 +61,55 @@ export default function AlarmDataPanel() {
         ))}
       </div>
 
-      {/* Mini area chart */}
+      {/* Stacked area chart */}
       <div className="mb-4">
-        {mounted ? (
-          <ResponsiveContainer width="100%" height={80}>
-            <AreaChart data={alarmChartData} margin={{ top: 0, right: 0, left: 0, bottom: 0 }}>
-              <defs>
-                <linearGradient id="aGradC" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#ff3b5c" stopOpacity={0.35} />
-                  <stop offset="95%" stopColor="#ff3b5c" stopOpacity={0} />
-                </linearGradient>
-                <linearGradient id="aGradM" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#ff8c00" stopOpacity={0.35} />
-                  <stop offset="95%" stopColor="#ff8c00" stopOpacity={0} />
-                </linearGradient>
-              </defs>
-              <Area type="monotone" dataKey="major" stackId="a" stroke="#ff8c00" strokeWidth={1.5} fill="url(#aGradM)" dot={false} animationDuration={800} />
-              <Area type="monotone" dataKey="critical" stackId="a" stroke="#ff3b5c" strokeWidth={1.5} fill="url(#aGradC)" dot={false} animationDuration={800} />
-            </AreaChart>
-          </ResponsiveContainer>
-        ) : (
-          <div style={{ height: 80 }} />
-        )}
+        <ChartContainer config={chartConfig} className="h-[80px] w-full">
+          <AreaChart
+            data={alarmChartData}
+            margin={{ top: 0, right: 0, left: 0, bottom: 0 }}
+          >
+            <defs>
+              <linearGradient id="gradMajor" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="5%" stopColor="var(--color-major)" stopOpacity={0.35} />
+                <stop offset="95%" stopColor="var(--color-major)" stopOpacity={0} />
+              </linearGradient>
+              <linearGradient id="gradCritical" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="5%" stopColor="var(--color-critical)" stopOpacity={0.35} />
+                <stop offset="95%" stopColor="var(--color-critical)" stopOpacity={0} />
+              </linearGradient>
+            </defs>
+            <CartesianGrid vertical={false} stroke="rgba(255,255,255,0.04)" />
+            <XAxis
+              dataKey="t"
+              tickLine={false}
+              axisLine={false}
+              tick={{ fill: "#6b6b80", fontSize: 9, fontFamily: "var(--font-dm-mono)" }}
+              tickMargin={4}
+            />
+            <ChartTooltip
+              cursor={false}
+              content={<ChartTooltipContent indicator="dot" />}
+            />
+            <Area
+              dataKey="major"
+              type="natural"
+              fill="url(#gradMajor)"
+              stroke="var(--color-major)"
+              strokeWidth={1.5}
+              stackId="a"
+              animationDuration={800}
+            />
+            <Area
+              dataKey="critical"
+              type="natural"
+              fill="url(#gradCritical)"
+              stroke="var(--color-critical)"
+              strokeWidth={1.5}
+              stackId="a"
+              animationDuration={800}
+            />
+          </AreaChart>
+        </ChartContainer>
       </div>
 
       {/* Table */}

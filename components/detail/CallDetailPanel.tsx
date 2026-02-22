@@ -1,25 +1,32 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import {
-  ComposedChart,
-  Bar,
-  Line,
-  XAxis,
-  ResponsiveContainer,
-  CartesianGrid,
-} from "recharts";
+import { Bar, Line, ComposedChart, CartesianGrid, XAxis } from "recharts";
 import { callComposedData } from "@/lib/data";
+import {
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+  type ChartConfig,
+} from "@/components/ui/chart";
+
+const chartConfig = {
+  volume: {
+    label: "Call Volume",
+    color: "#E2008A",
+  },
+  trend: {
+    label: "Trend",
+    color: "#38bdf8",
+  },
+} satisfies ChartConfig;
 
 export default function CallDetailPanel() {
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => setMounted(true), []);
-
   return (
     <div
-      className="rounded-lg p-5"
+      className="rounded-lg p-5 flex flex-col"
       style={{ background: "var(--surface)", border: "1px solid var(--border)" }}
     >
+      {/* Header */}
       <div className="flex items-center justify-between mb-4">
         <p
           className="text-[11px] uppercase tracking-widest"
@@ -56,24 +63,38 @@ export default function CallDetailPanel() {
         </div>
       </div>
 
-      {/* Composed chart */}
-      {mounted ? (
-        <ResponsiveContainer width="100%" height={120}>
-          <ComposedChart data={callComposedData} margin={{ top: 0, right: 0, left: 0, bottom: 0 }}>
-            <CartesianGrid stroke="rgba(255,255,255,0.04)" vertical={false} />
-            <XAxis
-              dataKey="hour"
-              tick={{ fill: "#6b6b80", fontSize: 9, fontFamily: "var(--font-dm-mono)" }}
-              axisLine={false}
-              tickLine={false}
-            />
-            <Bar dataKey="volume" fill="rgba(226,0,138,0.5)" radius={[2, 2, 0, 0]} animationDuration={800} />
-            <Line type="monotone" dataKey="trend" stroke="#38bdf8" strokeWidth={1.5} dot={false} animationDuration={800} />
-          </ComposedChart>
-        </ResponsiveContainer>
-      ) : (
-        <div style={{ height: 120 }} />
-      )}
+      {/* Bar + Line composed chart */}
+      <ChartContainer config={chartConfig} className="flex-1 w-full min-h-0">
+        <ComposedChart data={callComposedData} margin={{ top: 0, right: 0, left: 0, bottom: 0 }}>
+          <CartesianGrid vertical={false} stroke="rgba(255,255,255,0.04)" />
+          <XAxis
+            dataKey="hour"
+            tickLine={false}
+            axisLine={false}
+            tick={{ fill: "#6b6b80", fontSize: 9, fontFamily: "var(--font-dm-mono)" }}
+            tickMargin={4}
+          />
+          <ChartTooltip
+            cursor={false}
+            content={<ChartTooltipContent indicator="dot" />}
+          />
+          <Bar
+            dataKey="volume"
+            fill="var(--color-volume)"
+            fillOpacity={0.5}
+            radius={[2, 2, 0, 0]}
+            animationDuration={800}
+          />
+          <Line
+            dataKey="trend"
+            type="linear"
+            stroke="var(--color-trend)"
+            strokeWidth={1.5}
+            dot={false}
+            animationDuration={800}
+          />
+        </ComposedChart>
+      </ChartContainer>
     </div>
   );
 }
