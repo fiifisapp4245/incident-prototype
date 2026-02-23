@@ -12,8 +12,8 @@ const ibmPlexSans = IBM_Plex_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Incident Perceptor — Deutsche Telekom",
-  description: "AI-Enhanced Network Incident Monitoring Dashboard",
+  title: "Incident Prototype",
+  description: "Network Incident Monitoring Dashboard",
 };
 
 export default function RootLayout({
