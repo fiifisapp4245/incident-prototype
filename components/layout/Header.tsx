@@ -3,17 +3,26 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { User, Menu } from "lucide-react";
+import { useLanguage, useT } from "@/contexts/LanguageContext";
+import { LangCode } from "@/lib/translations";
 
-const nav = [
-  { label: "Overview", href: "/" },
-  { label: "Analytics", href: "#" },
-  { label: "History", href: "#" },
+const langOptions: LangCode[] = ["EN" as unknown as LangCode, "SO" as unknown as LangCode, "DE" as unknown as LangCode];
+const LANGS: { code: LangCode; label: string }[] = [
+  { code: "en", label: "EN" },
+  { code: "so", label: "SO" },
+  { code: "de", label: "DE" },
 ];
-
-const langs = ["EN", "SO", "DE"];
 
 export default function Header() {
   const pathname = usePathname();
+  const { lang, setLang } = useLanguage();
+  const t = useT();
+
+  const nav = [
+    { label: t.overview,  href: "/" },
+    { label: t.analytics, href: "#" },
+    { label: t.history,   href: "#" },
+  ];
 
   return (
     <header
@@ -40,13 +49,13 @@ export default function Header() {
             className="text-[15px] text-white leading-tight"
             style={{ fontFamily: "var(--font-syne)", fontWeight: 700 }}
           >
-            Incident Perceptor
+            {t.appName}
           </span>
           <span
             className="text-[10px] leading-tight mt-0.5"
             style={{ color: "var(--text-muted)", fontFamily: "var(--font-dm-mono)" }}
           >
-            AI-Enhanced Monitoring
+            {t.aiMonitoring}
           </span>
         </div>
       </div>
@@ -67,7 +76,6 @@ export default function Header() {
               }}
             >
               {item.label}
-              {/* Active bottom bar */}
               {isActive && (
                 <span
                   className="absolute bottom-0 left-6 right-6 h-[2px] rounded-t"
@@ -89,18 +97,19 @@ export default function Header() {
           className="flex items-center rounded overflow-hidden mr-3"
           style={{ border: "1px solid var(--border2)" }}
         >
-          {langs.map((lang, i) => (
+          {LANGS.map((l, i) => (
             <button
-              key={lang}
+              key={l.code}
+              onClick={() => setLang(l.code)}
               className="px-3 py-1.5 text-[11px] transition-colors"
               style={{
                 fontFamily: "var(--font-dm-mono)",
-                color: lang === "EN" ? "#fff" : "var(--text-muted)",
-                background: lang === "EN" ? "var(--magenta)" : "transparent",
-                borderRight: i < langs.length - 1 ? "1px solid var(--border2)" : "none",
+                color: lang === l.code ? "#fff" : "var(--text-muted)",
+                background: lang === l.code ? "var(--magenta)" : "transparent",
+                borderRight: i < LANGS.length - 1 ? "1px solid var(--border2)" : "none",
               }}
             >
-              {lang}
+              {l.label}
             </button>
           ))}
         </div>

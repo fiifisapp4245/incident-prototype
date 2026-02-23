@@ -7,6 +7,7 @@ import {
   ChartTooltipContent,
   type ChartConfig,
 } from "@/components/ui/chart";
+import { useT } from "@/contexts/LanguageContext";
 
 const chartConfig = {
   value:      { label: "Tickets" },
@@ -15,15 +16,17 @@ const chartConfig = {
   done:       { label: "Done",        color: "#00c896" },
 } satisfies ChartConfig;
 
-const pieData = [
-  { status: "toDo",       name: "To Do",       value: 23, fill: "var(--color-toDo)",       color: "#ff3b5c" },
-  { status: "inProgress", name: "In Progress", value: 52, fill: "var(--color-inProgress)", color: "#ff8c00" },
-  { status: "done",       name: "Done",        value: 12, fill: "var(--color-done)",        color: "#00c896" },
-];
-
-const total = pieData.reduce((s, d) => s + d.value, 0);
-
 export default function TicketFlowPanel() {
+  const t = useT();
+
+  const pieData = [
+    { status: "toDo",       name: t.toDo,       value: 23, fill: "var(--color-toDo)",       color: "#ff3b5c" },
+    { status: "inProgress", name: t.inProgress,  value: 52, fill: "var(--color-inProgress)", color: "#ff8c00" },
+    { status: "done",       name: t.done,        value: 12, fill: "var(--color-done)",        color: "#00c896" },
+  ];
+
+  const total = pieData.reduce((s, d) => s + d.value, 0);
+
   return (
     <div
       className="rounded-xl p-6 flex flex-col h-full"
@@ -33,7 +36,7 @@ export default function TicketFlowPanel() {
         className="text-[11px] uppercase tracking-widest mb-5"
         style={{ color: "var(--text-muted)", fontFamily: "var(--font-dm-mono)" }}
       >
-        Ticket Flow
+        {t.ticketFlow}
       </p>
 
       <div className="flex items-center gap-6 flex-1">
@@ -65,11 +68,9 @@ export default function TicketFlowPanel() {
             </span>
             <span
               className="text-[9px] uppercase tracking-wider mt-1 text-center leading-tight"
-              style={{ color: "var(--text-dim)", fontFamily: "var(--font-dm-mono)" }}
+              style={{ color: "var(--text-dim)", fontFamily: "var(--font-dm-mono)", whiteSpace: "pre-wrap" }}
             >
-              Open
-              <br />
-              Tickets
+              {t.openTickets}
             </span>
           </div>
         </div>

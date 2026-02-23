@@ -15,12 +15,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-
-const pieData = [
-  { status: "inProgress", label: "In Progress", value: 23, fill: "var(--color-inProgress)" },
-  { status: "toDo",       label: "To Do",        value: 64, fill: "var(--color-toDo)" },
-  { status: "done",       label: "Done",         value: 12, fill: "var(--color-done)" },
-];
+import { useT } from "@/contexts/LanguageContext";
 
 const chartConfig = {
   value:      { label: "Tickets" },
@@ -35,12 +30,14 @@ const statusColor: Record<string, string> = {
   Done:          "#00c896",
 };
 
-function TicketTable() {
+type T = ReturnType<typeof useT>;
+
+function TicketTable({ headers, statusLabels }: { headers: [string, string, string]; statusLabels: Record<string, string> }) {
   return (
     <table className="w-full text-[11px]" style={{ fontFamily: "var(--font-dm-mono)" }}>
       <thead>
         <tr style={{ borderBottom: "1px solid var(--border)" }}>
-          {["Ticket", "Summary", "Status"].map((h) => (
+          {headers.map((h) => (
             <th key={h} className="text-left pb-2 pr-4" style={{ color: "var(--text-dim)" }}>
               {h}
             </th>
@@ -61,7 +58,7 @@ function TicketTable() {
                   border: `1px solid ${statusColor[row.status]}33`,
                 }}
               >
-                {row.status}
+                {statusLabels[row.status] || row.status}
               </span>
             </td>
           </tr>
@@ -72,6 +69,21 @@ function TicketTable() {
 }
 
 export default function TicketDetailPanel() {
+  const t = useT();
+
+  const pieData = [
+    { status: "inProgress", label: t.inProgress, value: 23, fill: "var(--color-inProgress)" },
+    { status: "toDo",       label: t.toDo,       value: 64, fill: "var(--color-toDo)" },
+    { status: "done",       label: t.done,        value: 12, fill: "var(--color-done)" },
+  ];
+
+  const ticketHeaders: [string, string, string] = [t.ticket, t.summary, t.status];
+  const statusLabels: Record<string, string> = {
+    "In Progress": t.inProgress,
+    "To Do":       t.toDo,
+    Done:          t.done,
+  };
+
   return (
     <div
       className="rounded-lg p-5"
@@ -83,7 +95,7 @@ export default function TicketDetailPanel() {
           className="text-[11px] uppercase tracking-widest"
           style={{ color: "var(--text-muted)", fontFamily: "var(--font-dm-mono)" }}
         >
-          Ticket Flow
+          {t.ticketFlow}
         </p>
         <Dialog>
           <DialogTrigger asChild>
@@ -91,7 +103,7 @@ export default function TicketDetailPanel() {
               className="text-[11px] cursor-pointer hover:opacity-70 transition-opacity"
               style={{ color: "var(--magenta)", fontFamily: "var(--font-dm-mono)" }}
             >
-              View Details
+              {t.viewDetails}
             </span>
           </DialogTrigger>
           <DialogContent
@@ -106,7 +118,7 @@ export default function TicketDetailPanel() {
                 className="text-[11px] uppercase tracking-widest"
                 style={{ color: "var(--text-muted)", fontFamily: "var(--font-dm-mono)" }}
               >
-                Ticket Flow
+                {t.ticketFlow}
               </DialogTitle>
             </DialogHeader>
 
@@ -137,13 +149,13 @@ export default function TicketDetailPanel() {
               </ChartContainer>
               <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
                 <span className="text-3xl font-extrabold leading-none" style={{ color: "var(--text)", fontFamily: "var(--font-syne)", fontWeight: 800 }}>87</span>
-                <span className="text-[10px]" style={{ color: "var(--text-dim)", fontFamily: "var(--font-dm-mono)" }}>Tickets</span>
+                <span className="text-[10px]" style={{ color: "var(--text-dim)", fontFamily: "var(--font-dm-mono)" }}>{t.tickets}</span>
               </div>
             </div>
 
             {/* Table — scrollable */}
             <div className="flex-1 overflow-y-auto px-6 py-4">
-              <TicketTable />
+              <TicketTable headers={ticketHeaders} statusLabels={statusLabels} />
             </div>
           </DialogContent>
         </Dialog>
@@ -179,12 +191,12 @@ export default function TicketDetailPanel() {
         </ChartContainer>
         <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
           <span className="text-2xl font-extrabold leading-none" style={{ color: "var(--text)", fontFamily: "var(--font-syne)", fontWeight: 800 }}>87</span>
-          <span className="text-[10px]" style={{ color: "var(--text-dim)", fontFamily: "var(--font-dm-mono)" }}>Tickets</span>
+          <span className="text-[10px]" style={{ color: "var(--text-dim)", fontFamily: "var(--font-dm-mono)" }}>{t.tickets}</span>
         </div>
       </div>
 
       {/* Table */}
-      <TicketTable />
+      <TicketTable headers={ticketHeaders} statusLabels={statusLabels} />
     </div>
   );
 }

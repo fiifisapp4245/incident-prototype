@@ -15,6 +15,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { useT } from "@/contexts/LanguageContext";
 
 const chartConfig = {
   score: {
@@ -24,6 +25,7 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 export default function DownDetectorDetailPanel() {
+  const t = useT();
   return (
     <div
       className="rounded-lg p-5 flex flex-col"
@@ -35,7 +37,7 @@ export default function DownDetectorDetailPanel() {
           className="text-[11px] uppercase tracking-widest"
           style={{ color: "var(--text-muted)", fontFamily: "var(--font-dm-mono)" }}
         >
-          Down Detector Data
+          {t.downDetectorData}
         </p>
         <Dialog>
           <DialogTrigger asChild>
@@ -43,7 +45,7 @@ export default function DownDetectorDetailPanel() {
               className="text-[11px] cursor-pointer hover:opacity-70 transition-opacity"
               style={{ color: "var(--magenta)", fontFamily: "var(--font-dm-mono)" }}
             >
-              View Details
+              {t.viewDetails}
             </span>
           </DialogTrigger>
           <DialogContent
@@ -58,7 +60,7 @@ export default function DownDetectorDetailPanel() {
                 className="text-[11px] uppercase tracking-widest"
                 style={{ color: "var(--text-muted)", fontFamily: "var(--font-dm-mono)" }}
               >
-                Down Detector Data
+                {t.downDetectorData}
               </DialogTitle>
             </DialogHeader>
 
@@ -68,7 +70,7 @@ export default function DownDetectorDetailPanel() {
                 60%
               </p>
               <p className="text-[10px]" style={{ color: "var(--text-dim)", fontFamily: "var(--font-dm-mono)" }}>
-                Current user score
+                {t.currentUserScore}
               </p>
             </div>
 
@@ -117,7 +119,7 @@ export default function DownDetectorDetailPanel() {
         className="text-[10px] mb-4"
         style={{ color: "var(--text-dim)", fontFamily: "var(--font-dm-mono)" }}
       >
-        Current user score
+        {t.currentUserScore}
       </p>
 
       <ChartContainer config={chartConfig} className="flex-1 w-full min-h-0">

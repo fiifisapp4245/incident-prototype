@@ -3,12 +3,14 @@
 import { ExternalLink } from "lucide-react";
 import { Incident } from "@/types/incident";
 import { SEV_COLOR } from "@/lib/utils";
+import { useT } from "@/contexts/LanguageContext";
 
 interface Props {
   incident: Incident;
 }
 
 export default function ClassificationSummary({ incident }: Props) {
+  const t = useT();
   const sevColor = SEV_COLOR[incident.sev];
 
   return (
@@ -22,7 +24,7 @@ export default function ClassificationSummary({ incident }: Props) {
           className="text-[11px] uppercase tracking-widest"
           style={{ color: "var(--text-muted)", fontFamily: "var(--font-dm-mono)" }}
         >
-          AI Classification Summary
+          {t.aiClassification}
         </p>
         <span
           className="text-[10px] px-2 py-0.5 rounded"
@@ -33,7 +35,7 @@ export default function ClassificationSummary({ incident }: Props) {
             fontFamily: "var(--font-dm-mono)",
           }}
         >
-          Agent Output
+          {t.agentOutput}
         </span>
       </div>
 
@@ -58,7 +60,7 @@ export default function ClassificationSummary({ incident }: Props) {
           className="text-[11px] uppercase tracking-widest mb-2"
           style={{ color: "var(--text-dim)", fontFamily: "var(--font-dm-mono)" }}
         >
-          Affected Services
+          {t.affectedServices}
         </p>
         <div className="flex flex-wrap gap-2">
           {incident.tags.map((tag) => (
@@ -84,7 +86,7 @@ export default function ClassificationSummary({ incident }: Props) {
           className="text-[11px] uppercase tracking-widest mb-2"
           style={{ color: "var(--text-dim)", fontFamily: "var(--font-dm-mono)" }}
         >
-          Supporting Evidence
+          {t.supportingEvidence}
         </p>
         <div className="flex flex-col gap-1.5">
           {incident.evidence.map((ev, i) => (

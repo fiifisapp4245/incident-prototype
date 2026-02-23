@@ -96,7 +96,7 @@ export default function IncidentCard({ incident }: Props) {
         {incident.title}
       </p>
 
-      {/* Bottom row: service tag + status tag + duration */}
+      {/* Bottom row: service tag + status tag + separator + duration */}
       <div className="flex items-center gap-2 flex-wrap">
         <span
           className="text-[10px] px-2 py-0.5 rounded-full"
@@ -117,6 +117,18 @@ export default function IncidentCard({ incident }: Props) {
           }}
         >
           {incident.status}
+        </span>
+        <span
+          className="text-[10px]"
+          style={{ color: "var(--border2)", fontFamily: "var(--font-dm-mono)" }}
+        >
+          |
+        </span>
+        <span
+          className="text-[10px] tabular-nums"
+          style={{ color: "var(--text-dim)", fontFamily: "var(--font-dm-mono)" }}
+        >
+          Duration: {incident.duration}
         </span>
       </div>
     </div>

@@ -1,17 +1,19 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-
-const rows = [
-  { label: "Active — Unassigned", count: 3, pct: 20, color: "#ff3b5c", colorBg: "rgba(255,59,92,0.12)" },
-  { label: "In Progress", count: 8, pct: 53, color: "#ff8c00", colorBg: "rgba(255,140,0,0.12)" },
-  { label: "Monitoring", count: 3, pct: 20, color: "#f5c518", colorBg: "rgba(245,197,24,0.12)" },
-  { label: "Resolved", count: 12, pct: 80, color: "#00c896", colorBg: "rgba(0,200,150,0.12)" },
-];
+import { useT } from "@/contexts/LanguageContext";
 
 export default function ResponseStatusBars() {
+  const t = useT();
   const [animated, setAnimated] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
+
+  const rows = [
+    { label: t.activeUnassigned, count: 3,  pct: 20, color: "#ff3b5c", colorBg: "rgba(255,59,92,0.12)" },
+    { label: t.inProgress,       count: 8,  pct: 53, color: "#ff8c00", colorBg: "rgba(255,140,0,0.12)" },
+    { label: t.monitoring,       count: 3,  pct: 20, color: "#f5c518", colorBg: "rgba(245,197,24,0.12)" },
+    { label: t.resolved,         count: 12, pct: 80, color: "#00c896", colorBg: "rgba(0,200,150,0.12)" },
+  ];
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -36,7 +38,7 @@ export default function ResponseStatusBars() {
         className="text-[11px] uppercase tracking-widest mb-6"
         style={{ color: "var(--text-muted)", fontFamily: "var(--font-dm-mono)" }}
       >
-        Incident Response Status
+        {t.incidentResponseStatus}
       </p>
       <div className="flex flex-col gap-5">
         {rows.map((r) => (

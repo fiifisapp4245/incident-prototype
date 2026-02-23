@@ -3,12 +3,14 @@
 import Link from "next/link";
 import { Incident } from "@/types/incident";
 import { SEV_COLOR, SEV_BG, STATUS_COLOR } from "@/lib/utils";
+import { useT } from "@/contexts/LanguageContext";
 
 interface Props {
   incident: Incident;
 }
 
 export default function IncidentHeader({ incident }: Props) {
+  const t = useT();
   const sevColor = SEV_COLOR[incident.sev];
   const statusColor = STATUS_COLOR[incident.status];
 
@@ -19,7 +21,7 @@ export default function IncidentHeader({ incident }: Props) {
         className="flex items-center gap-2 text-[11px] mb-4"
         style={{ color: "var(--text-dim)", fontFamily: "var(--font-dm-mono)" }}
       >
-        <Link href="/" className="hover:text-white transition-colors">Overview</Link>
+        <Link href="/" className="hover:text-white transition-colors">{t.overview}</Link>
         <span>›</span>
         <span style={{ color: "var(--text-muted)" }}>{incident.id}</span>
       </div>
@@ -71,15 +73,11 @@ export default function IncidentHeader({ incident }: Props) {
             {/* Detail row */}
             <div className="flex flex-wrap gap-5">
               {[
-                { label: "Service", value: incident.service },
-                { label: "Detected At", value: `${incident.time} UTC` },
-                { label: "Duration", value: incident.duration },
-                {
-                  label: "Status",
-                  value: incident.status,
-                  color: statusColor,
-                },
-                { label: "Assigned To", value: incident.assigned },
+                { label: t.service,    value: incident.service },
+                { label: t.detectedAt, value: `${incident.time} UTC` },
+                { label: t.duration,   value: incident.duration },
+                { label: t.status,     value: incident.status, color: statusColor },
+                { label: t.assignedTo, value: incident.assigned },
               ].map((item) => (
                 <div key={item.label}>
                   <p
@@ -120,7 +118,7 @@ export default function IncidentHeader({ incident }: Props) {
               className="text-[11px] uppercase tracking-widest"
               style={{ color: "var(--text-dim)", fontFamily: "var(--font-dm-mono)" }}
             >
-              Criticality Score
+              {t.criticalityScore}
             </p>
           </div>
         </div>

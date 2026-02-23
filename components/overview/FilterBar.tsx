@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/select";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { useT } from "@/contexts/LanguageContext";
 
 interface FilterState {
   severity: string;
@@ -24,9 +25,6 @@ interface Props {
   filters: FilterState;
   setFilters: Dispatch<SetStateAction<FilterState>>;
 }
-
-const sevOptions = ["All", "Critical", "Major", "Minor"];
-const statusOptions = ["All", "Active", "In Progress", "Monitoring", "Resolved"];
 
 const fieldStyle: React.CSSProperties = {
   background: "var(--surface2)",
@@ -44,7 +42,7 @@ function SelectField({
 }: {
   label: string;
   value: string;
-  options: string[];
+  options: { value: string; label: string }[];
   onChange: (v: string) => void;
 }) {
   return (
@@ -64,22 +62,16 @@ function SelectField({
         </SelectTrigger>
         <SelectContent
           className="rounded-lg p-1"
-          style={{
-            background: "var(--surface2)",
-            border: "1px solid rgba(255,255,255,0.12)",
-          }}
+          style={{ background: "var(--surface2)", border: "1px solid rgba(255,255,255,0.12)" }}
         >
           {options.map((o) => (
             <SelectItem
-              key={o}
-              value={o}
+              key={o.value}
+              value={o.value}
               className="text-[13px] rounded cursor-pointer focus:bg-[#1c1c28] focus:text-[#f0f0f5]"
-              style={{
-                color: "var(--text-muted)",
-                fontFamily: "var(--font-dm-mono)",
-              }}
+              style={{ color: "var(--text-muted)", fontFamily: "var(--font-dm-mono)" }}
             >
-              {o}
+              {o.label}
             </SelectItem>
           ))}
         </SelectContent>
@@ -91,10 +83,12 @@ function SelectField({
 function DateField({
   label,
   value,
+  placeholder,
   onChange,
 }: {
   label: string;
   value: string;
+  placeholder: string;
   onChange: (v: string) => void;
 }) {
   const date = value ? new Date(value + "T00:00:00") : undefined;
@@ -111,23 +105,17 @@ function DateField({
         <PopoverTrigger asChild>
           <button
             className="flex h-[42px] w-full items-center gap-2 rounded-lg px-3 text-left text-[13px] outline-none"
-            style={{
-              ...fieldStyle,
-              color: date ? "var(--text)" : "var(--text-dim)",
-            }}
+            style={{ ...fieldStyle, color: date ? "var(--text)" : "var(--text-dim)" }}
           >
             <CalendarIcon size={14} style={{ color: "var(--text-dim)", flexShrink: 0 }} />
-            {date ? format(date, "dd MMM yyyy") : <span>Pick a date</span>}
+            {date ? format(date, "dd MMM yyyy") : <span>{placeholder}</span>}
           </button>
         </PopoverTrigger>
         <PopoverContent
           align="start"
           sideOffset={6}
           className="w-auto p-0 rounded-xl"
-          style={{
-            background: "var(--surface)",
-            border: "1px solid rgba(255,255,255,0.12)",
-          }}
+          style={{ background: "var(--surface)", border: "1px solid rgba(255,255,255,0.12)" }}
         >
           <Calendar
             mode="single"
@@ -144,11 +132,28 @@ function DateField({
 const defaultFilters: FilterState = { severity: "All", status: "All", startDate: "", endDate: "" };
 
 export default function FilterBar({ filters, setFilters }: Props) {
+  const t = useT();
+
   const isFiltered =
     filters.severity !== "All" ||
     filters.status !== "All" ||
     filters.startDate !== "" ||
     filters.endDate !== "";
+
+  const sevOptions = [
+    { value: "All",      label: t.all },
+    { value: "Critical", label: t.critical },
+    { value: "Major",    label: t.major },
+    { value: "Minor",    label: t.minor },
+  ];
+
+  const statusOptions = [
+    { value: "All",         label: t.all },
+    { value: "Active",      label: t.active },
+    { value: "In Progress", label: t.inProgress },
+    { value: "Monitoring",  label: t.monitoring },
+    { value: "Resolved",    label: t.resolved },
+  ];
 
   return (
     <div
@@ -156,27 +161,25 @@ export default function FilterBar({ filters, setFilters }: Props) {
       style={{ background: "var(--surface)", border: "1px solid var(--border)" }}
     >
       <SelectField
-        label="Severity"
+        label={t.severity}
         value={filters.severity}
         options={sevOptions}
         onChange={(v) => setFilters((f) => ({ ...f, severity: v }))}
       />
 
       <SelectField
-        label="Status"
+        label={t.status}
         value={filters.status}
         options={statusOptions}
         onChange={(v) => setFilters((f) => ({ ...f, status: v }))}
       />
 
-      <div
-        className="self-stretch w-px shrink-0"
-        style={{ background: "var(--border2)", margin: "2px 0" }}
-      />
+      <div className="self-stretch w-px shrink-0" style={{ background: "var(--border2)", margin: "2px 0" }} />
 
       <DateField
-        label="Start Date"
+        label={t.startDate}
         value={filters.startDate}
+        placeholder={t.pickDate}
         onChange={(v) => setFilters((f) => ({ ...f, startDate: v }))}
       />
 
@@ -184,12 +187,13 @@ export default function FilterBar({ filters, setFilters }: Props) {
         className="shrink-0 pb-[11px] text-[12px]"
         style={{ color: "var(--text-dim)", fontFamily: "var(--font-dm-mono)" }}
       >
-        to
+        —
       </span>
 
       <DateField
-        label="End Date"
+        label={t.endDate}
         value={filters.endDate}
+        placeholder={t.pickDate}
         onChange={(v) => setFilters((f) => ({ ...f, endDate: v }))}
       />
 
@@ -205,7 +209,7 @@ export default function FilterBar({ filters, setFilters }: Props) {
           }}
         >
           <X size={12} />
-          Clear
+          {t.clear}
         </button>
       )}
     </div>

@@ -8,6 +8,7 @@ import {
   ChartTooltipContent,
   type ChartConfig,
 } from "@/components/ui/chart";
+import { useT } from "@/contexts/LanguageContext";
 
 const chartConfig = {
   value:    { label: "Incidents" },
@@ -17,18 +18,19 @@ const chartConfig = {
   resolved: { label: "Resolved", color: "#00c896" },
 } satisfies ChartConfig;
 
-const pieData = [
-  { status: "critical", name: "Critical", value: 3,  fill: "var(--color-critical)", color: "#ff3b5c" },
-  { status: "major",    name: "Major",    value: 6,  fill: "var(--color-major)",    color: "#ff8c00" },
-  { status: "minor",    name: "Minor",    value: 5,  fill: "var(--color-minor)",    color: "#f5c518" },
-  { status: "resolved", name: "Resolved", value: 12, fill: "var(--color-resolved)", color: "#00c896" },
-];
-
-const total = pieData.reduce((s, d) => s + d.value, 0);
-
 export default function SeverityDonut() {
+  const t = useT();
   const [animated, setAnimated] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
+
+  const pieData = [
+    { status: "critical", name: t.critical, value: 3,  fill: "var(--color-critical)", color: "#ff3b5c" },
+    { status: "major",    name: t.major,    value: 6,  fill: "var(--color-major)",    color: "#ff8c00" },
+    { status: "minor",    name: t.minor,    value: 5,  fill: "var(--color-minor)",    color: "#f5c518" },
+    { status: "resolved", name: t.resolved, value: 12, fill: "var(--color-resolved)", color: "#00c896" },
+  ];
+
+  const total = pieData.reduce((s, d) => s + d.value, 0);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -51,7 +53,7 @@ export default function SeverityDonut() {
         className="text-[11px] uppercase tracking-widest mb-5"
         style={{ color: "var(--text-muted)", fontFamily: "var(--font-dm-mono)" }}
       >
-        Severity Distribution
+        {t.severityDistribution}
       </p>
 
       <div className="flex items-center gap-6 flex-1">
@@ -83,11 +85,9 @@ export default function SeverityDonut() {
             </span>
             <span
               className="text-[9px] uppercase tracking-wider mt-1 text-center leading-tight"
-              style={{ color: "var(--text-dim)", fontFamily: "var(--font-dm-mono)" }}
+              style={{ color: "var(--text-dim)", fontFamily: "var(--font-dm-mono)", whiteSpace: "pre-wrap" }}
             >
-              Total
-              <br />
-              Incidents
+              {t.totalIncidents}
             </span>
           </div>
         </div>

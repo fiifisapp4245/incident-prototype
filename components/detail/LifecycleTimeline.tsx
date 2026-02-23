@@ -2,12 +2,14 @@
 
 import { Incident } from "@/types/incident";
 import { SEV_COLOR } from "@/lib/utils";
+import { useT } from "@/contexts/LanguageContext";
 
 interface Props {
   incident: Incident;
 }
 
 export default function LifecycleTimeline({ incident }: Props) {
+  const t = useT();
   const topColor = SEV_COLOR[incident.sev];
 
   return (
@@ -20,7 +22,7 @@ export default function LifecycleTimeline({ incident }: Props) {
           className="text-[11px] uppercase tracking-widest"
           style={{ color: "var(--text-muted)", fontFamily: "var(--font-dm-mono)" }}
         >
-          Incident Lifecycle Timeline
+          {t.incidentLifecycle}
         </p>
         <span
           className="text-[10px] px-2 py-0.5 rounded"
@@ -31,7 +33,7 @@ export default function LifecycleTimeline({ incident }: Props) {
             fontFamily: "var(--font-dm-mono)",
           }}
         >
-          Auto-tracked
+          {t.autoTracked}
         </span>
       </div>
 

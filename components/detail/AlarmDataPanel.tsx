@@ -16,6 +16,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { useT } from "@/contexts/LanguageContext";
 
 const chartConfig = {
   major: {
@@ -28,18 +29,12 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-const stats = [
-  { label: "Critical", val: "1,250", color: "#ff3b5c" },
-  { label: "Major",    val: "674",   color: "#ff8c00" },
-  { label: "Minor",    val: "1,250", color: "#f5c518" },
-];
-
-function AlarmTable() {
+function AlarmTable({ headers }: { headers: [string, string, string] }) {
   return (
     <table className="w-full text-[11px]" style={{ fontFamily: "var(--font-dm-mono)" }}>
       <thead>
         <tr style={{ borderBottom: "1px solid var(--border)" }}>
-          {["Alarm", "Duration", "Status"].map((h) => (
+          {headers.map((h) => (
             <th key={h} className="text-left pb-2 pr-3" style={{ color: "var(--text-dim)" }}>
               {h}
             </th>
@@ -71,6 +66,14 @@ function AlarmTable() {
 }
 
 export default function AlarmDataPanel() {
+  const t = useT();
+  const stats = [
+    { label: t.critical, val: "1,250", color: "#ff3b5c" },
+    { label: t.major,    val: "674",   color: "#ff8c00" },
+    { label: t.minor,    val: "1,250", color: "#f5c518" },
+  ];
+  const alarmHeaders: [string, string, string] = [t.alarm, t.duration, t.status];
+
   return (
     <div
       className="rounded-lg p-5 flex flex-col"
@@ -82,7 +85,7 @@ export default function AlarmDataPanel() {
           className="text-[11px] uppercase tracking-widest"
           style={{ color: "var(--text-muted)", fontFamily: "var(--font-dm-mono)" }}
         >
-          Alarm Data
+          {t.alarmData}
         </p>
         <Dialog>
           <DialogTrigger asChild>
@@ -90,7 +93,7 @@ export default function AlarmDataPanel() {
               className="text-[11px] cursor-pointer hover:opacity-70 transition-opacity"
               style={{ color: "var(--magenta)", fontFamily: "var(--font-dm-mono)" }}
             >
-              View Details
+              {t.viewDetails}
             </span>
           </DialogTrigger>
           <DialogContent
@@ -105,7 +108,7 @@ export default function AlarmDataPanel() {
                 className="text-[11px] uppercase tracking-widest"
                 style={{ color: "var(--text-muted)", fontFamily: "var(--font-dm-mono)" }}
               >
-                Alarm Data
+                {t.alarmData}
               </DialogTitle>
             </DialogHeader>
 
@@ -154,7 +157,7 @@ export default function AlarmDataPanel() {
 
             {/* Table — scrollable */}
             <div className="flex-1 overflow-y-auto px-6 py-4">
-              <AlarmTable />
+              <AlarmTable headers={alarmHeaders} />
             </div>
           </DialogContent>
         </Dialog>
@@ -204,7 +207,7 @@ export default function AlarmDataPanel() {
       </div>
 
       {/* Table */}
-      <AlarmTable />
+      <AlarmTable headers={alarmHeaders} />
     </div>
   );
 }

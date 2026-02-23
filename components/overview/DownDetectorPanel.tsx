@@ -2,6 +2,7 @@
 
 import { AlertTriangle } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { useT } from "@/contexts/LanguageContext";
 
 const score = 62.5;
 const SEGMENTS = 30;
@@ -14,6 +15,7 @@ function segmentColor(index: number): string {
 }
 
 export default function DownDetectorPanel() {
+  const t = useT();
   const filledCount = Math.round((score / 100) * SEGMENTS);
 
   return (
@@ -25,14 +27,14 @@ export default function DownDetectorPanel() {
         className="text-[11px] uppercase tracking-widest mb-4"
         style={{ color: "var(--text-muted)", fontFamily: "var(--font-dm-mono)" }}
       >
-        Down Detector
+        {t.downDetector}
       </p>
 
       <p
         className="text-[11px] mb-2"
         style={{ color: "var(--text-dim)", fontFamily: "var(--font-dm-mono)" }}
       >
-        Current User Report Score
+        {t.currentUserReportScore}
       </p>
 
       <p
@@ -69,22 +71,22 @@ export default function DownDetectorPanel() {
       {/* Threshold labels */}
       <div className="flex justify-between mb-5">
         {[
-          { label: "0%", sub: "Normal" },
-          { label: "50%", sub: "Elevated" },
-          { label: "100%", sub: "Critical" },
-        ].map((t) => (
-          <div key={t.label} className="flex flex-col items-center gap-0.5">
+          { label: t.pct0,   sub: t.normal   },
+          { label: t.pct50,  sub: t.elevated  },
+          { label: t.pct100, sub: t.critical  },
+        ].map((item) => (
+          <div key={item.label} className="flex flex-col items-center gap-0.5">
             <span
               className="text-[10px]"
               style={{ color: "var(--text-dim)", fontFamily: "var(--font-dm-mono)" }}
             >
-              {t.label}
+              {item.label}
             </span>
             <span
               className="text-[9px]"
               style={{ color: "var(--text-dim)", fontFamily: "var(--font-dm-mono)" }}
             >
-              {t.sub}
+              {item.sub}
             </span>
           </div>
         ))}
@@ -99,13 +101,13 @@ export default function DownDetectorPanel() {
           className="text-[11px] font-semibold"
           style={{ color: "#ff8c00", fontFamily: "var(--font-dm-mono)" }}
         >
-          Down Detector
+          {t.alertTitle}
         </AlertTitle>
         <AlertDescription
           className="text-[11px]"
           style={{ color: "#ff8c00", fontFamily: "var(--font-dm-mono)" }}
         >
-          Elevated above the baseline threshold
+          {t.alertDesc}
         </AlertDescription>
       </Alert>
     </div>

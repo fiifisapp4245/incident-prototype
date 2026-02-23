@@ -8,6 +8,7 @@ import {
   ChartTooltipContent,
   type ChartConfig,
 } from "@/components/ui/chart";
+import { useT } from "@/contexts/LanguageContext";
 
 const chartConfig = {
   volume: {
@@ -17,6 +18,7 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 export default function CallVolumePanel() {
+  const t = useT();
   return (
     <div
       className="rounded-xl p-6 flex flex-col h-full"
@@ -26,7 +28,7 @@ export default function CallVolumePanel() {
         className="text-[11px] uppercase tracking-widest mb-4"
         style={{ color: "var(--text-muted)", fontFamily: "var(--font-dm-mono)" }}
       >
-        Call Volume · Support Centre
+        {t.callVolumeTitle}
       </p>
 
       <ChartContainer config={chartConfig} className="h-[140px] w-full">
@@ -68,7 +70,7 @@ export default function CallVolumePanel() {
             className="text-[11px] uppercase tracking-widest mb-1.5"
             style={{ color: "var(--text-dim)", fontFamily: "var(--font-dm-mono)" }}
           >
-            Avg Wait
+            {t.avgWait}
           </p>
           <p
             className="text-3xl font-extrabold leading-none"
@@ -79,7 +81,7 @@ export default function CallVolumePanel() {
               className="text-base font-normal ml-1"
               style={{ color: "var(--text-muted)" }}
             >
-              hrs
+              {t.hrs}
             </span>
           </p>
         </div>
@@ -91,7 +93,7 @@ export default function CallVolumePanel() {
             className="text-[11px] uppercase tracking-widest mb-1.5"
             style={{ color: "var(--text-dim)", fontFamily: "var(--font-dm-mono)" }}
           >
-            Volume
+            {t.volume}
           </p>
           <p
             className="text-3xl font-extrabold leading-none"

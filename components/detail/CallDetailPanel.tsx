@@ -15,6 +15,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { useT } from "@/contexts/LanguageContext";
 
 const chartConfig = {
   volume: {
@@ -27,15 +28,17 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-function CallStats() {
+type T = ReturnType<typeof useT>;
+
+function CallStats({ t }: { t: T }) {
   return (
     <div className="flex gap-6">
       <div>
         <p className="text-2xl font-bold mb-0.5" style={{ color: "var(--text)", fontFamily: "var(--font-syne)", fontWeight: 800 }}>
-          5 <span className="text-sm font-normal" style={{ color: "var(--text-muted)" }}>hrs</span>
+          5 <span className="text-sm font-normal" style={{ color: "var(--text-muted)" }}>{t.hrs}</span>
         </p>
         <p className="text-[10px]" style={{ color: "var(--text-dim)", fontFamily: "var(--font-dm-mono)" }}>
-          Average waiting time
+          {t.averageWaitingTime}
         </p>
       </div>
       <div className="w-px self-stretch" style={{ background: "var(--border)" }} />
@@ -44,7 +47,7 @@ function CallStats() {
           321
         </p>
         <p className="text-[10px]" style={{ color: "var(--text-dim)", fontFamily: "var(--font-dm-mono)" }}>
-          Volumes of calls
+          {t.volumesOfCalls}
         </p>
       </div>
     </div>
@@ -52,6 +55,7 @@ function CallStats() {
 }
 
 export default function CallDetailPanel() {
+  const t = useT();
   return (
     <div
       className="rounded-lg p-5 flex flex-col"
@@ -63,7 +67,7 @@ export default function CallDetailPanel() {
           className="text-[11px] uppercase tracking-widest"
           style={{ color: "var(--text-muted)", fontFamily: "var(--font-dm-mono)" }}
         >
-          Call Overview
+          {t.callOverview}
         </p>
         <Dialog>
           <DialogTrigger asChild>
@@ -71,7 +75,7 @@ export default function CallDetailPanel() {
               className="text-[11px] cursor-pointer hover:opacity-70 transition-opacity"
               style={{ color: "var(--magenta)", fontFamily: "var(--font-dm-mono)" }}
             >
-              View Details
+              {t.viewDetails}
             </span>
           </DialogTrigger>
           <DialogContent
@@ -86,13 +90,13 @@ export default function CallDetailPanel() {
                 className="text-[11px] uppercase tracking-widest"
                 style={{ color: "var(--text-muted)", fontFamily: "var(--font-dm-mono)" }}
               >
-                Call Overview
+                {t.callOverview}
               </DialogTitle>
             </DialogHeader>
 
             {/* Stats */}
             <div className="px-6 pt-5 pb-4 shrink-0">
-              <CallStats />
+              <CallStats t={t} />
             </div>
 
             {/* Chart — fills remaining space */}
@@ -124,7 +128,7 @@ export default function CallDetailPanel() {
 
       {/* Stats */}
       <div className="flex gap-6 mb-4">
-        <CallStats />
+        <CallStats t={t} />
       </div>
 
       {/* Bar + Line composed chart */}

@@ -4,6 +4,7 @@ import { useMemo } from "react";
 import { incidents } from "@/lib/data";
 import { Incident } from "@/types/incident";
 import IncidentCard from "./IncidentCard";
+import { useT } from "@/contexts/LanguageContext";
 
 interface FilterState {
   severity: string;
@@ -17,6 +18,8 @@ interface Props {
 }
 
 export default function IncidentFeed({ filters }: Props) {
+  const t = useT();
+
   const filtered = useMemo(() => {
     return incidents.filter((inc: Incident) => {
       if (filters.severity !== "All" && inc.sev !== filters.severity) return false;
@@ -37,13 +40,13 @@ export default function IncidentFeed({ filters }: Props) {
           className="text-[11px] uppercase tracking-widest"
           style={{ color: "var(--text-muted)", fontFamily: "var(--font-dm-mono)" }}
         >
-          Live Incident Feed
+          {t.liveIncidentFeed}
         </p>
         <span
           className="flex items-center gap-1.5 text-[12px] cursor-pointer"
           style={{ color: "var(--text-muted)", fontFamily: "var(--font-dm-mono)" }}
         >
-          View all incidents
+          {t.viewAllIncidents}
           <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
             <path d="M2.5 7h9M8 3.5L11.5 7 8 10.5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
@@ -59,7 +62,7 @@ export default function IncidentFeed({ filters }: Props) {
             className="text-center py-12 text-[13px]"
             style={{ color: "var(--text-dim)", fontFamily: "var(--font-dm-mono)" }}
           >
-            No incidents match your filters
+            {t.noIncidentsMatch}
           </div>
         ) : (
           filtered.map((inc) => <IncidentCard key={inc.id} incident={inc} />)

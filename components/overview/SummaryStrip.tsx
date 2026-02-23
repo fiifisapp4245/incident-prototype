@@ -4,6 +4,7 @@ import { useMemo } from "react";
 import { ArrowUp, ArrowDown } from "lucide-react";
 import { incidents } from "@/lib/data";
 import { Incident } from "@/types/incident";
+import { useT } from "@/contexts/LanguageContext";
 
 interface FilterState {
   severity: string;
@@ -17,6 +18,8 @@ interface Props {
 }
 
 export default function SummaryStrip({ filters }: Props) {
+  const t = useT();
+
   const filtered = useMemo(() => {
     return incidents.filter((inc: Incident) => {
       if (filters.severity !== "All" && inc.sev !== filters.severity) return false;
@@ -32,10 +35,10 @@ export default function SummaryStrip({ filters }: Props) {
   const minor    = filtered.filter((i) => i.sev === "Minor").length;
 
   const cards = [
-    { label: "Active Incidents", value: filtered.length, accentColor: "#38bdf8", trend: 3,  trendDir: "up"   as const },
-    { label: "Critical",         value: critical,         accentColor: "#ff3b5c", trend: 1,  trendDir: "up"   as const },
-    { label: "Major",            value: major,            accentColor: "#ff8c00", trend: 1,  trendDir: "up"   as const },
-    { label: "Minor",            value: minor,            accentColor: "#f5c518", trend: 1,  trendDir: "down" as const },
+    { label: t.activeIncidents, value: filtered.length, accentColor: "#38bdf8", trend: 3,  trendDir: "up"   as const },
+    { label: t.critical,        value: critical,         accentColor: "#ff3b5c", trend: 1,  trendDir: "up"   as const },
+    { label: t.major,           value: major,            accentColor: "#ff8c00", trend: 1,  trendDir: "up"   as const },
+    { label: t.minor,           value: minor,            accentColor: "#f5c518", trend: 1,  trendDir: "down" as const },
   ];
 
   return (
@@ -95,7 +98,7 @@ export default function SummaryStrip({ filters }: Props) {
               className="text-[11px]"
               style={{ color: "var(--text-dim)", fontFamily: "var(--font-dm-mono)" }}
             >
-              vs yesterday
+              {t.vsYesterday}
             </span>
           </div>
         </div>
