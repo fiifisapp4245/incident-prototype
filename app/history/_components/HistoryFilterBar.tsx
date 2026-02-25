@@ -1,9 +1,7 @@
 "use client";
 
 import { Dispatch, SetStateAction } from "react";
-import { format, parseISO } from "date-fns";
-import { Calendar as CalendarIcon, Search, X } from "lucide-react";
-import { type DateRange } from "react-day-picker";
+import { Search, X } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -11,11 +9,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Calendar } from "@/components/ui/calendar";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { useT } from "@/contexts/LanguageContext";
 import { HISTORY_ENGINEERS, HISTORY_SERVICES } from "@/lib/historyData";
-import { type Period } from "./HistoryPageTitle";
 
 export interface HistoryFilters {
   severity: string;
@@ -30,8 +25,6 @@ export interface HistoryFilters {
 interface Props {
   filters: HistoryFilters;
   setFilters: Dispatch<SetStateAction<HistoryFilters>>;
-  period: Period;
-  onPeriodChange: (p: Period) => void;
 }
 
 const fieldStyle: React.CSSProperties = {
@@ -41,81 +34,6 @@ const fieldStyle: React.CSSProperties = {
   fontFamily: "var(--font-dm-mono)",
   fontSize: 13,
 };
-
-function DateRangeField({
-  label,
-  startDate,
-  endDate,
-  onChange,
-}: {
-  label: string;
-  startDate: string;
-  endDate: string;
-  onChange: (start: string, end: string) => void;
-}) {
-  const range: DateRange | undefined =
-    startDate || endDate
-      ? {
-          from: startDate ? parseISO(startDate) : undefined,
-          to: endDate ? parseISO(endDate) : undefined,
-        }
-      : undefined;
-
-  function handleSelect(r: DateRange | undefined) {
-    onChange(
-      r?.from ? format(r.from, "yyyy-MM-dd") : "",
-      r?.to ? format(r.to, "yyyy-MM-dd") : ""
-    );
-  }
-
-  return (
-    <div className="flex flex-col gap-1.5 flex-1 min-w-[240px]">
-      <label
-        className="text-[11px] uppercase tracking-widest"
-        style={{ color: "var(--text-dim)", fontFamily: "var(--font-dm-mono)" }}
-      >
-        {label}
-      </label>
-      <Popover>
-        <PopoverTrigger asChild>
-          <button
-            className="flex h-[42px] w-full items-center gap-2 rounded-lg px-3 text-left text-[13px] outline-none"
-            style={{
-              ...fieldStyle,
-              color: range?.from ? "var(--text)" : "var(--text-dim)",
-            }}
-          >
-            <CalendarIcon size={14} style={{ color: "var(--text-dim)", flexShrink: 0 }} />
-            {range?.from ? (
-              range.to ? (
-                <>{format(range.from, "dd MMM yyyy")} – {format(range.to, "dd MMM yyyy")}</>
-              ) : (
-                format(range.from, "dd MMM yyyy")
-              )
-            ) : (
-              <span>Pick a date range</span>
-            )}
-          </button>
-        </PopoverTrigger>
-        <PopoverContent
-          align="start"
-          sideOffset={6}
-          className="w-auto p-0 rounded-xl"
-          style={{ background: "var(--surface)", border: "1px solid rgba(255,255,255,0.12)" }}
-        >
-          <Calendar
-            mode="range"
-            defaultMonth={range?.from}
-            selected={range}
-            onSelect={handleSelect}
-            numberOfMonths={2}
-            initialFocus
-          />
-        </PopoverContent>
-      </Popover>
-    </div>
-  );
-}
 
 function SelectField({
   label,
@@ -163,10 +81,8 @@ function SelectField({
   );
 }
 
-export default function HistoryFilterBar({ filters, setFilters, period, onPeriodChange }: Props) {
+export default function HistoryFilterBar({ filters, setFilters }: Props) {
   const t = useT();
-
-  const isCustom = period === "custom";
 
   const isFiltered =
     filters.severity !== "All" ||
@@ -215,33 +131,7 @@ export default function HistoryFilterBar({ filters, setFilters, period, onPeriod
       className="flex flex-col gap-4 px-6 py-5 rounded-xl"
       style={{ background: "var(--surface)", border: "1px solid var(--border)" }}
     >
-      {/* Row 1: Date range (only visible in custom mode) */}
-      {isCustom && (
-        <div className="flex items-end gap-4 flex-wrap">
-          <DateRangeField
-            label={t.dateRange ?? "Date Range"}
-            startDate={filters.startDate}
-            endDate={filters.endDate}
-            onChange={(start, end) =>
-              setFilters((f) => ({ ...f, startDate: start, endDate: end }))
-            }
-          />
-
-          <button
-            onClick={() => onPeriodChange("30d")}
-            className="shrink-0 text-[11px] self-end mb-[11px] transition-opacity hover:opacity-70"
-            style={{
-              color: "var(--text-dim)",
-              fontFamily: "var(--font-dm-mono)",
-              textDecoration: "underline",
-            }}
-          >
-            Reset to last 30 days
-          </button>
-        </div>
-      )}
-
-      {/* Row 2: Attribute filters + search */}
+      {/* Attribute filters + search */}
       <div className="flex items-end gap-4 flex-wrap">
         <SelectField
           label={t.severity}

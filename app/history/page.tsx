@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useEffect, useCallback } from "react";
+import { useState, useMemo, useEffect, useCallback, useRef } from "react";
 import { format, subDays } from "date-fns";
 import { historyIncidents } from "@/lib/historyData";
 import HistoryPageTitle, { type Period } from "./_components/HistoryPageTitle";
@@ -9,6 +9,7 @@ import HistoryFilterBar, { type HistoryFilters } from "./_components/HistoryFilt
 import HistoryFeed, { type ViewMode } from "./_components/HistoryFeed";
 import ComparisonTray from "./_components/ComparisonTray";
 import ComparisonModal from "./_components/ComparisonModal";
+import DateRangeModal from "./_components/DateRangeModal";
 
 function fmt(d: Date) {
   return format(d, "yyyy-MM-dd");
@@ -48,6 +49,8 @@ export default function HistoryPage() {
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [compareOpen, setCompareOpen] = useState(false);
   const [viewMode, setViewMode] = useState<ViewMode>("card");
+  const [dateRangeOpen, setDateRangeOpen] = useState(false);
+  const prevPeriodRef = useRef<Period>("30d");
 
   // Sync date range when period changes (not custom)
   useEffect(() => {
@@ -57,7 +60,25 @@ export default function HistoryPage() {
   }, [period]);
 
   const handlePeriodChange = useCallback((p: Period) => {
-    setPeriod(p);
+    if (p === "custom") {
+      setDateRangeOpen(true); // open modal; don't commit period yet
+    } else {
+      prevPeriodRef.current = p;
+      setPeriod(p);
+    }
+  }, []);
+
+  const handleRangeApply = useCallback((start: string, end: string) => {
+    prevPeriodRef.current = "custom";
+    setPeriod("custom");
+    setFilters((f) => ({ ...f, startDate: start, endDate: end }));
+    setDateRangeOpen(false);
+  }, []);
+
+  const handleRangeCancel = useCallback(() => {
+    setDateRangeOpen(false);
+    // Revert period pill to whatever was active before Custom was clicked
+    setPeriod(prevPeriodRef.current);
   }, []);
 
   const handleToggle = useCallback((id: string) => {
@@ -131,8 +152,6 @@ export default function HistoryPage() {
         <HistoryFilterBar
           filters={filters}
           setFilters={setFilters}
-          period={period}
-          onPeriodChange={handlePeriodChange}
         />
 
         {/* Section 5: Incident feed */}
@@ -158,6 +177,15 @@ export default function HistoryPage() {
         open={compareOpen}
         incidents={selectedIncidents}
         onClose={() => setCompareOpen(false)}
+      />
+
+      {/* Custom date range modal */}
+      <DateRangeModal
+        open={dateRangeOpen}
+        initialStart={filters.startDate}
+        initialEnd={filters.endDate}
+        onApply={handleRangeApply}
+        onCancel={handleRangeCancel}
       />
     </>
   );
