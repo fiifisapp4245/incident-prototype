@@ -1,8 +1,9 @@
 "use client";
 
 import { Dispatch, SetStateAction } from "react";
-import { format } from "date-fns";
+import { format, parseISO } from "date-fns";
 import { Calendar as CalendarIcon, Search, X } from "lucide-react";
+import { type DateRange } from "react-day-picker";
 import {
   Select,
   SelectContent,
@@ -41,20 +42,34 @@ const fieldStyle: React.CSSProperties = {
   fontSize: 13,
 };
 
-function DateField({
+function DateRangeField({
   label,
-  value,
-  placeholder,
+  startDate,
+  endDate,
   onChange,
 }: {
   label: string;
-  value: string;
-  placeholder: string;
-  onChange: (v: string) => void;
+  startDate: string;
+  endDate: string;
+  onChange: (start: string, end: string) => void;
 }) {
-  const date = value ? new Date(value + "T00:00:00") : undefined;
+  const range: DateRange | undefined =
+    startDate || endDate
+      ? {
+          from: startDate ? parseISO(startDate) : undefined,
+          to: endDate ? parseISO(endDate) : undefined,
+        }
+      : undefined;
+
+  function handleSelect(r: DateRange | undefined) {
+    onChange(
+      r?.from ? format(r.from, "yyyy-MM-dd") : "",
+      r?.to ? format(r.to, "yyyy-MM-dd") : ""
+    );
+  }
+
   return (
-    <div className="flex flex-col gap-1.5 flex-1 min-w-[120px]">
+    <div className="flex flex-col gap-1.5 flex-1 min-w-[240px]">
       <label
         className="text-[11px] uppercase tracking-widest"
         style={{ color: "var(--text-dim)", fontFamily: "var(--font-dm-mono)" }}
@@ -65,10 +80,21 @@ function DateField({
         <PopoverTrigger asChild>
           <button
             className="flex h-[42px] w-full items-center gap-2 rounded-lg px-3 text-left text-[13px] outline-none"
-            style={{ ...fieldStyle, color: date ? "var(--text)" : "var(--text-dim)" }}
+            style={{
+              ...fieldStyle,
+              color: range?.from ? "var(--text)" : "var(--text-dim)",
+            }}
           >
             <CalendarIcon size={14} style={{ color: "var(--text-dim)", flexShrink: 0 }} />
-            {date ? format(date, "dd MMM yyyy") : <span>{placeholder}</span>}
+            {range?.from ? (
+              range.to ? (
+                <>{format(range.from, "dd MMM yyyy")} – {format(range.to, "dd MMM yyyy")}</>
+              ) : (
+                format(range.from, "dd MMM yyyy")
+              )
+            ) : (
+              <span>Pick a date range</span>
+            )}
           </button>
         </PopoverTrigger>
         <PopoverContent
@@ -78,9 +104,11 @@ function DateField({
           style={{ background: "var(--surface)", border: "1px solid rgba(255,255,255,0.12)" }}
         >
           <Calendar
-            mode="single"
-            selected={date}
-            onSelect={(d) => onChange(d ? format(d, "yyyy-MM-dd") : "")}
+            mode="range"
+            defaultMonth={range?.from}
+            selected={range}
+            onSelect={handleSelect}
+            numberOfMonths={2}
             initialFocus
           />
         </PopoverContent>
@@ -190,28 +218,18 @@ export default function HistoryFilterBar({ filters, setFilters, period, onPeriod
       {/* Row 1: Date range (only visible in custom mode) */}
       {isCustom && (
         <div className="flex items-end gap-4 flex-wrap">
-          <DateField
-            label={t.startDate}
-            value={filters.startDate}
-            placeholder={t.pickDate}
-            onChange={(v) => setFilters((f) => ({ ...f, startDate: v }))}
-          />
-          <span
-            className="shrink-0 pb-[11px] text-[12px]"
-            style={{ color: "var(--text-dim)", fontFamily: "var(--font-dm-mono)" }}
-          >
-            —
-          </span>
-          <DateField
-            label={t.endDate}
-            value={filters.endDate}
-            placeholder={t.pickDate}
-            onChange={(v) => setFilters((f) => ({ ...f, endDate: v }))}
+          <DateRangeField
+            label={t.dateRange ?? "Date Range"}
+            startDate={filters.startDate}
+            endDate={filters.endDate}
+            onChange={(start, end) =>
+              setFilters((f) => ({ ...f, startDate: start, endDate: end }))
+            }
           />
 
           <button
             onClick={() => onPeriodChange("30d")}
-            className="shrink-0 pb-[2px] text-[11px] self-end mb-[11px] transition-opacity hover:opacity-70"
+            className="shrink-0 text-[11px] self-end mb-[11px] transition-opacity hover:opacity-70"
             style={{
               color: "var(--text-dim)",
               fontFamily: "var(--font-dm-mono)",

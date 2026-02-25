@@ -20,6 +20,7 @@ export const translations = {
     endDate: "End Date",
     clear: "Clear",
     pickDate: "Pick a date",
+    dateRange: "Date Range",
     // Values (used as filter keys — keep matching data)
     all: "All",
     critical: "Critical",
@@ -154,6 +155,7 @@ export const translations = {
     endDate: "Enddatum",
     clear: "Zurücksetzen",
     pickDate: "Datum wählen",
+    dateRange: "Datumsbereich",
     all: "Alle",
     critical: "Kritisch",
     major: "Schwerwiegend",
@@ -273,6 +275,7 @@ export const translations = {
     endDate: "Taariikhda Dhammaadka",
     clear: "Naadi",
     pickDate: "Dooro taariikhda",
+    dateRange: "Xadka Taariikhda",
     all: "Dhammaan",
     critical: "Adag",
     major: "Weyn",
