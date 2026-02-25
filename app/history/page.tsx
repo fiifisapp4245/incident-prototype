@@ -5,7 +5,6 @@ import { format, subDays } from "date-fns";
 import { historyIncidents } from "@/lib/historyData";
 import HistoryPageTitle, { type Period } from "./_components/HistoryPageTitle";
 import HistorySummaryBar from "./_components/HistorySummaryBar";
-import CalendarHeatmap from "./_components/CalendarHeatmap";
 import HistoryFilterBar, { type HistoryFilters } from "./_components/HistoryFilterBar";
 import HistoryFeed, { type ViewMode } from "./_components/HistoryFeed";
 import ComparisonTray from "./_components/ComparisonTray";
@@ -46,7 +45,6 @@ export default function HistoryPage() {
     startDate: fmt(subDays(new Date(), 29)),
     endDate: fmt(new Date()),
   });
-  const [selectedDay, setSelectedDay] = useState<string | null>(null);
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [compareOpen, setCompareOpen] = useState(false);
   const [viewMode, setViewMode] = useState<ViewMode>("card");
@@ -56,18 +54,10 @@ export default function HistoryPage() {
     if (period === "custom") return;
     const range = getDateRange(period);
     setFilters((f) => ({ ...f, startDate: range.start, endDate: range.end }));
-    setSelectedDay(null); // clear heatmap selection on period change
   }, [period]);
 
   const handlePeriodChange = useCallback((p: Period) => {
     setPeriod(p);
-    if (p !== "custom") {
-      setSelectedDay(null);
-    }
-  }, []);
-
-  const handleDayClick = useCallback((date: string) => {
-    setSelectedDay(date || null);
   }, []);
 
   const handleToggle = useCallback((id: string) => {
@@ -90,15 +80,11 @@ export default function HistoryPage() {
     setCompareOpen(true);
   }, []);
 
-  // Effective date range (heatmap day click overrides period range)
-  const effectiveStart = selectedDay ?? filters.startDate;
-  const effectiveEnd = selectedDay ?? filters.endDate;
-
   const filteredIncidents = useMemo(() => {
     return historyIncidents.filter((inc) => {
       // Date range
-      if (effectiveStart && inc.date < effectiveStart) return false;
-      if (effectiveEnd && inc.date > effectiveEnd) return false;
+      if (filters.startDate && inc.date < filters.startDate) return false;
+      if (filters.endDate && inc.date > filters.endDate) return false;
 
       // Severity
       if (filters.severity !== "All" && inc.sev !== filters.severity) return false;
@@ -124,7 +110,7 @@ export default function HistoryPage() {
 
       return true;
     });
-  }, [effectiveStart, effectiveEnd, filters]);
+  }, [filters]);
 
   const selectedIncidents = historyIncidents.filter((i) => selected.has(i.id));
 
@@ -137,19 +123,11 @@ export default function HistoryPage() {
         {/* Section 2: Summary bar */}
         <HistorySummaryBar
           incidents={filteredIncidents}
-          startDate={effectiveStart}
-          endDate={effectiveEnd}
-          selectedDay={selectedDay}
+          startDate={filters.startDate}
+          endDate={filters.endDate}
         />
 
-        {/* Section 3: Calendar heatmap */}
-        <CalendarHeatmap
-          incidents={historyIncidents}
-          selectedDay={selectedDay}
-          onDayClick={handleDayClick}
-        />
-
-        {/* Section 4: Filter bar */}
+        {/* Section 3: Filter bar */}
         <HistoryFilterBar
           filters={filters}
           setFilters={setFilters}

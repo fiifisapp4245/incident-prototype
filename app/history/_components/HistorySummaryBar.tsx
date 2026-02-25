@@ -9,13 +9,9 @@ interface Props {
   incidents: HistoricalIncident[];
   startDate: string;
   endDate: string;
-  selectedDay: string | null;
 }
 
-function formatDateRange(start: string, end: string, selectedDay: string | null): string {
-  if (selectedDay) {
-    return format(parseISO(selectedDay), "d MMM yyyy");
-  }
+function formatDateRange(start: string, end: string): string {
   if (!start && !end) return "All time";
   const fmt = (d: string) => format(parseISO(d), "d MMM yyyy");
   if (start && end && start === end) return fmt(start);
@@ -24,7 +20,7 @@ function formatDateRange(start: string, end: string, selectedDay: string | null)
   return `Until ${end ? format(parseISO(end), "d MMM yyyy") : ""}`;
 }
 
-export default function HistorySummaryBar({ incidents, startDate, endDate, selectedDay }: Props) {
+export default function HistorySummaryBar({ incidents, startDate, endDate }: Props) {
   const t = useT();
 
   const { critical, major, minor } = useMemo(() => ({
@@ -34,7 +30,7 @@ export default function HistorySummaryBar({ incidents, startDate, endDate, selec
   }), [incidents]);
 
   const total = incidents.length;
-  const dateLabel = formatDateRange(startDate, endDate, selectedDay);
+  const dateLabel = formatDateRange(startDate, endDate);
   const pct = (n: number) => total === 0 ? "0%" : `${Math.round((n / total) * 100)}%`;
 
   const cards = [
