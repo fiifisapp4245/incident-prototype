@@ -27,94 +27,90 @@ function formatDateRange(start: string, end: string, selectedDay: string | null)
 export default function HistorySummaryBar({ incidents, startDate, endDate, selectedDay }: Props) {
   const t = useT();
 
-  const counts = useMemo(() => {
-    const critical = incidents.filter((i) => i.sev === "Critical").length;
-    const major = incidents.filter((i) => i.sev === "Major").length;
-    const minor = incidents.filter((i) => i.sev === "Minor").length;
-    return { critical, major, minor };
-  }, [incidents]);
+  const { critical, major, minor } = useMemo(() => ({
+    critical: incidents.filter((i) => i.sev === "Critical").length,
+    major:    incidents.filter((i) => i.sev === "Major").length,
+    minor:    incidents.filter((i) => i.sev === "Minor").length,
+  }), [incidents]);
 
+  const total = incidents.length;
   const dateLabel = formatDateRange(startDate, endDate, selectedDay);
+  const pct = (n: number) => total === 0 ? "0%" : `${Math.round((n / total) * 100)}%`;
+
+  const cards = [
+    {
+      label: t.incidentsCount,
+      value: total,
+      accentColor: "var(--magenta)",
+      sub: dateLabel,
+      subIsDate: true,
+    },
+    {
+      label: t.critical,
+      value: critical,
+      accentColor: "#ff3b5c",
+      sub: pct(critical),
+      subIsDate: false,
+    },
+    {
+      label: t.major,
+      value: major,
+      accentColor: "#ff8c00",
+      sub: pct(major),
+      subIsDate: false,
+    },
+    {
+      label: t.minor,
+      value: minor,
+      accentColor: "#f5c518",
+      sub: pct(minor),
+      subIsDate: false,
+    },
+  ];
 
   return (
-    <div
-      className="flex items-center gap-4 px-5 py-3 rounded-xl flex-wrap"
-      style={{ background: "var(--surface)", border: "1px solid var(--border)" }}
-    >
-      <span
-        className="text-[13px]"
-        style={{ color: "var(--text)", fontFamily: "var(--font-dm-mono)" }}
-      >
-        <span style={{ color: "var(--text-muted)" }}>{t.showing} </span>
-        <span style={{ fontWeight: 600 }}>{incidents.length}</span>
-        <span style={{ color: "var(--text-muted)" }}> {t.incidentsCount}</span>
-      </span>
-
-      <span
-        className="text-[11px]"
-        style={{ color: "var(--border2)", fontFamily: "var(--font-dm-mono)" }}
-      >
-        ·
-      </span>
-
-      <span
-        className="text-[12px] tabular-nums"
-        style={{ color: "var(--text-dim)", fontFamily: "var(--font-dm-mono)" }}
-      >
-        {dateLabel}
-      </span>
-
-      {incidents.length > 0 && (
-        <>
-          <span
-            className="text-[11px]"
-            style={{ color: "var(--border2)", fontFamily: "var(--font-dm-mono)" }}
-          >
-            ·
-          </span>
-
-          {counts.critical > 0 && (
-            <span
-              className="text-[12px] font-medium"
-              style={{ color: "#ff3b5c", fontFamily: "var(--font-dm-mono)" }}
-            >
-              {counts.critical} {t.critical}
-            </span>
-          )}
-
-          {counts.major > 0 && (
-            <span
-              className="text-[12px] font-medium"
-              style={{ color: "#ff8c00", fontFamily: "var(--font-dm-mono)" }}
-            >
-              {counts.major} {t.major}
-            </span>
-          )}
-
-          {counts.minor > 0 && (
-            <span
-              className="text-[12px] font-medium"
-              style={{ color: "#f5c518", fontFamily: "var(--font-dm-mono)" }}
-            >
-              {counts.minor} {t.minor}
-            </span>
-          )}
-        </>
-      )}
-
-      {selectedDay && (
-        <span
-          className="ml-auto text-[11px] px-2 py-0.5 rounded-full cursor-pointer transition-opacity hover:opacity-70"
+    <div className="grid grid-cols-4 gap-5">
+      {cards.map((c) => (
+        <div
+          key={c.label}
+          className="rounded-xl p-6 flex flex-col"
           style={{
-            background: "rgba(226,0,138,0.12)",
-            border: "1px solid rgba(226,0,138,0.25)",
-            color: "var(--magenta)",
-            fontFamily: "var(--font-dm-mono)",
+            background: "var(--surface)",
+            border: "1px solid var(--border)",
           }}
         >
-          {t.deselectDay}
-        </span>
-      )}
+          <p
+            className="text-[11px] uppercase tracking-widest mb-4"
+            style={{ color: "var(--text-muted)", fontFamily: "var(--font-dm-mono)" }}
+          >
+            {c.label}
+          </p>
+
+          <p
+            className="text-6xl leading-none mb-5"
+            style={{
+              color: "var(--text)",
+              fontFamily: "var(--font-syne)",
+              fontWeight: 800,
+            }}
+          >
+            {c.value}
+          </p>
+
+          <p
+            className="text-[12px] mt-auto tabular-nums"
+            style={{
+              color: c.subIsDate ? "var(--text-dim)" : c.accentColor,
+              fontFamily: "var(--font-dm-mono)",
+            }}
+          >
+            {c.sub}
+            {!c.subIsDate && total > 0 && (
+              <span style={{ color: "var(--text-dim)" }}> of total</span>
+            )}
+          </p>
+        </div>
+      ))}
     </div>
   );
 }
