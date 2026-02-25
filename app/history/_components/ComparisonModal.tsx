@@ -1,7 +1,6 @@
 "use client";
 
 import { format, parseISO } from "date-fns";
-import { X } from "lucide-react";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { HistoricalIncident } from "@/types/incident";
 import { SEV_COLOR, SEV_BG } from "@/lib/utils";
@@ -104,17 +103,16 @@ export default function ComparisonModal({ open, incidents, onClose }: Props) {
   return (
     <Dialog open={open} onOpenChange={(o) => { if (!o) onClose(); }}>
       <DialogContent
-        className="max-w-[90vw] w-full p-0 overflow-hidden rounded-xl"
+        className="max-w-[90vw] w-full p-0 gap-0 overflow-hidden rounded-xl flex flex-col"
         style={{
           background: "var(--surface)",
           border: "1px solid var(--border2)",
-          maxHeight: "90vh",
-          overflow: "auto",
+          height: "90vh",
         }}
       >
         {/* Header */}
         <div
-          className="flex items-center justify-between px-7 py-5"
+          className="flex items-center px-7 py-5"
           style={{ borderBottom: "1px solid var(--border)" }}
         >
           <span
@@ -123,17 +121,11 @@ export default function ComparisonModal({ open, incidents, onClose }: Props) {
           >
             {t.incidentCompare}
           </span>
-          <button
-            onClick={onClose}
-            className="w-8 h-8 flex items-center justify-center rounded-lg transition-colors hover:bg-white/5"
-          >
-            <X size={16} style={{ color: "var(--text-muted)" }} />
-          </button>
         </div>
 
         {/* Column headers — one per incident */}
         <div
-          className="grid"
+          className="grid px-7"
           style={{
             gridTemplateColumns: `120px repeat(${cols.length}, 1fr)`,
             borderBottom: "1px solid var(--border)",
@@ -181,7 +173,7 @@ export default function ComparisonModal({ open, incidents, onClose }: Props) {
         </div>
 
         {/* Comparison rows */}
-        <div className="px-7 pb-6">
+        <div className="px-7 pb-6 flex-1 overflow-y-auto">
           <CompareRow
             label="Severity"
             values={sevValues}
