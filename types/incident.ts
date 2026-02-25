@@ -24,3 +24,10 @@ export interface Incident {
   evidence: string[];
   timeline: TimelineEvent[];
 }
+
+export interface HistoricalIncident extends Omit<Incident, "status"> {
+  status: "Resolved";
+  resolvedAt: string;    // "HH:mm"
+  endDate: string;       // "YYYY-MM-DD"
+  classification: string;
+}
