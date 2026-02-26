@@ -20,8 +20,8 @@ export default function Header() {
 
   const nav = [
     { label: t.overview,  href: "/" },
-    { label: t.history,   href: "/history" },
     { label: t.analytics, href: "/analytics" },
+    { label: t.history,   href: "/history" },
   ];
 
   return (
