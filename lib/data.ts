@@ -204,7 +204,7 @@ export const incidents: Incident[] = [
     evidence: [
       "Diameter auth failure rate: 67%",
       "ALM-8801 — DEA certificate expiry",
-      "Partner NOC alerts from Vodafone DE, Orange FR",
+      "Partner NOC alerts from Nexatel DE, Eurolink FR",
       "Auto-escalation sent at 11:30 UTC (no response)",
     ],
     timeline: [
