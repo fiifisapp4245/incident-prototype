@@ -1,47 +1,10 @@
 "use client";
 
+import { PieChart, Pie, Label, Cell } from "recharts";
 import { TrendingUp, TrendingDown, Minus } from "lucide-react";
 import { useT } from "@/contexts/LanguageContext";
+import { ChartContainer } from "@/components/ui/chart";
 import type { PeriodData } from "@/lib/analyticsData";
-
-// SVG donut ring helper
-function DonutRing({ score }: { score: number }) {
-  const r = 52;
-  const cx = 64;
-  const cy = 64;
-  const circumference = 2 * Math.PI * r;
-  const filled = (score / 100) * circumference;
-  const gap = circumference - filled;
-
-  // Color: green > 90, amber 75-90, red < 75
-  const color =
-    score >= 90 ? "#00c896" :
-    score >= 75 ? "#ff8c00" :
-    "#ff3b5c";
-
-  return (
-    <svg width={128} height={128} viewBox="0 0 128 128">
-      {/* Track */}
-      <circle
-        cx={cx} cy={cy} r={r}
-        fill="none"
-        stroke="var(--surface3)"
-        strokeWidth={10}
-      />
-      {/* Filled arc */}
-      <circle
-        cx={cx} cy={cy} r={r}
-        fill="none"
-        stroke={color}
-        strokeWidth={10}
-        strokeLinecap="round"
-        strokeDasharray={`${filled} ${gap}`}
-        strokeDashoffset={circumference / 4}
-        style={{ transition: "stroke-dasharray 0.6s ease" }}
-      />
-    </svg>
-  );
-}
 
 interface Props {
   data: PeriodData;
@@ -57,26 +20,70 @@ export default function NetworkReliabilityScore({ data, periodLabel }: Props) {
     score >= 75 ? "#ff8c00" :
     "#ff3b5c";
 
+  const pieData = [
+    { name: "filled", value: score },
+    { name: "gap",    value: 100 - score },
+  ];
+
+  const improved = data.mttrChange < 0;
+  const trendColor = improved ? "#00c896" : data.mttrChange > 0 ? "#ff3b5c" : "var(--text-dim)";
+
   return (
     <div
       className="rounded-xl p-6 flex flex-col items-center justify-center text-center h-full"
       style={{ background: "var(--surface)", border: "1px solid var(--border)" }}
     >
-      {/* Ring + number overlay */}
-      <div className="relative flex items-center justify-center mb-4">
-        <DonutRing score={score} />
-        <div className="absolute inset-0 flex flex-col items-center justify-center">
-          <span
-            className="text-3xl leading-none"
-            style={{ fontFamily: "var(--font-syne)", fontWeight: 800, color }}
+      {/* Donut via shadcn ChartContainer + Recharts */}
+      <ChartContainer config={{}} className="aspect-square w-[180px]">
+        <PieChart>
+          <Pie
+            data={pieData}
+            dataKey="value"
+            innerRadius={64}
+            outerRadius={80}
+            startAngle={90}
+            endAngle={-270}
+            strokeWidth={0}
+            isAnimationActive
           >
-            {score.toFixed(1)}%
-          </span>
-        </div>
-      </div>
+            <Cell fill={color} />
+            <Cell fill="var(--surface3)" />
+            <Label
+              content={({ viewBox }) => {
+                if (!viewBox || !("cx" in viewBox) || !("cy" in viewBox)) return null;
+                const { cx, cy } = viewBox as { cx: number; cy: number };
+                return (
+                  <text textAnchor="middle" dominantBaseline="middle">
+                    <tspan
+                      x={cx}
+                      y={cy - 10}
+                      fontSize="26"
+                      fontWeight="800"
+                      fontFamily="var(--font-syne)"
+                      fill={color}
+                    >
+                      {score.toFixed(1)}%
+                    </tspan>
+                    <tspan
+                      x={cx}
+                      y={cy + 14}
+                      fontSize="10"
+                      fontFamily="var(--font-dm-mono)"
+                      fill="var(--text-dim)"
+                    >
+                      {t.networkReliability.split(" ").slice(0, 1).join(" ")}
+                    </tspan>
+                  </text>
+                );
+              }}
+            />
+          </Pie>
+        </PieChart>
+      </ChartContainer>
 
+      {/* Label below ring */}
       <p
-        className="text-[13px] font-semibold"
+        className="text-[13px] font-semibold mt-1"
         style={{ color: "var(--text)", fontFamily: "var(--font-ibm-sans)" }}
       >
         {t.networkReliability}
@@ -90,19 +97,16 @@ export default function NetworkReliabilityScore({ data, periodLabel }: Props) {
 
       {/* Trend row */}
       <div className="flex items-center gap-1.5 mt-3">
-        {data.mttrChange < 0 ? (
-          <TrendingUp size={13} color="#00c896" />
+        {improved ? (
+          <TrendingUp size={13} color={trendColor} />
         ) : data.mttrChange > 0 ? (
-          <TrendingDown size={13} color="#ff3b5c" />
+          <TrendingDown size={13} color={trendColor} />
         ) : (
-          <Minus size={13} color="var(--text-dim)" />
+          <Minus size={13} color={trendColor} />
         )}
         <span
           className="text-[11px]"
-          style={{
-            fontFamily: "var(--font-dm-mono)",
-            color: data.mttrChange < 0 ? "#00c896" : data.mttrChange > 0 ? "#ff3b5c" : "var(--text-dim)",
-          }}
+          style={{ fontFamily: "var(--font-dm-mono)", color: trendColor }}
         >
           {t.vsPrevPeriod}
         </span>
