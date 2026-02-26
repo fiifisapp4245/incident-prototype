@@ -152,7 +152,7 @@ export const heatmapMax = 15;
 export const recurrencePatterns: RecurrencePattern[] = [
   {
     id: "r1",
-    pattern: "4G Outage — Greater Accra Region",
+    pattern: "4G Outage — Berlin-Brandenburg Region",
     service: "4G/5G Data",
     count: 7,
     avgIntervalDays: 8.5,
@@ -161,7 +161,7 @@ export const recurrencePatterns: RecurrencePattern[] = [
   },
   {
     id: "r2",
-    pattern: "BSC Cluster Overload — Kumasi",
+    pattern: "BSC Cluster Overload — Munich",
     service: "Voice",
     count: 5,
     avgIntervalDays: 11.2,
@@ -179,7 +179,7 @@ export const recurrencePatterns: RecurrencePattern[] = [
   },
   {
     id: "r4",
-    pattern: "SMS Gateway Timeout — Western Region",
+    pattern: "SMS Gateway Timeout — Bavaria",
     service: "SMS",
     count: 3,
     avgIntervalDays: 22.1,
@@ -188,7 +188,7 @@ export const recurrencePatterns: RecurrencePattern[] = [
   },
   {
     id: "r5",
-    pattern: "Roaming Auth Failure — International GW",
+    pattern: "Roaming Auth Failure — EU Partners GW",
     service: "Roaming",
     count: 3,
     avgIntervalDays: 19.4,
@@ -210,14 +210,14 @@ export const aiInsights: AIInsight[] = [
   {
     id: "ins-2",
     type: "warning",
-    text: "Voice service incidents are 3× above the 60-day average. BSC cluster utilisation in Kumasi exceeds 92% — immediate investigation advised.",
+    text: "Voice service incidents are 3× above the 60-day average. BSC cluster utilisation in Munich exceeds 92% — immediate investigation advised.",
     supportText: "Based on 18 incidents · High confidence",
     sectionRef: "service-health",
   },
   {
     id: "ins-3",
     type: "pattern",
-    text: "4G/5G outages in Greater Accra have recurred 7 times in the last 60 days. Average recurrence interval: 8.5 days. Next window: ~1 Mar.",
+    text: "4G/5G outages in Berlin-Brandenburg have recurred 7 times in the last 60 days. Average recurrence interval: 8.5 days. Next window: ~1 Mar.",
     supportText: "Based on 7 recurrence events · High confidence",
     sectionRef: "recurrence",
   },
@@ -259,11 +259,11 @@ export const periodData: Record<Exclude<AnalyticsPeriod, "custom">, PeriodData> 
       { severity: "Minor",    avgMTTR: 18,  fill: "#f5c518" },
     ],
     engineerLeaderboard: [
-      { name: "K. Osei",    avgMTTR: 38, resolved: 9  },
-      { name: "A. Mensah",  avgMTTR: 41, resolved: 7  },
-      { name: "E. Boateng", avgMTTR: 47, resolved: 6  },
-      { name: "S. Addo",    avgMTTR: 52, resolved: 5  },
-      { name: "R. Asante",  avgMTTR: 61, resolved: 4  },
+      { name: "K. Fischer",   avgMTTR: 38, resolved: 9  },
+      { name: "A. Weber",     avgMTTR: 41, resolved: 7  },
+      { name: "L. Hoffmann",  avgMTTR: 47, resolved: 6  },
+      { name: "S. Bauer",     avgMTTR: 52, resolved: 5  },
+      { name: "O. Schmidt",   avgMTTR: 61, resolved: 4  },
     ],
     classAccuracy: [
       { initial: "Critical", correct: 70, escalated: 0,  downgraded: 24, falsePositive: 6  },
@@ -293,11 +293,11 @@ export const periodData: Record<Exclude<AnalyticsPeriod, "custom">, PeriodData> 
       { severity: "Minor",    avgMTTR: 21,  fill: "#f5c518" },
     ],
     engineerLeaderboard: [
-      { name: "K. Osei",    avgMTTR: 40, resolved: 38 },
-      { name: "A. Mensah",  avgMTTR: 43, resolved: 34 },
-      { name: "E. Boateng", avgMTTR: 49, resolved: 29 },
-      { name: "S. Addo",    avgMTTR: 55, resolved: 24 },
-      { name: "R. Asante",  avgMTTR: 63, resolved: 18 },
+      { name: "K. Fischer",   avgMTTR: 40, resolved: 38 },
+      { name: "A. Weber",     avgMTTR: 43, resolved: 34 },
+      { name: "L. Hoffmann",  avgMTTR: 49, resolved: 29 },
+      { name: "S. Bauer",     avgMTTR: 55, resolved: 24 },
+      { name: "O. Schmidt",   avgMTTR: 63, resolved: 18 },
     ],
     classAccuracy: [
       { initial: "Critical", correct: 68, escalated: 0,  downgraded: 22, falsePositive: 10 },
@@ -327,11 +327,11 @@ export const periodData: Record<Exclude<AnalyticsPeriod, "custom">, PeriodData> 
       { severity: "Minor",    avgMTTR: 25,  fill: "#f5c518" },
     ],
     engineerLeaderboard: [
-      { name: "K. Osei",    avgMTTR: 44, resolved: 112 },
-      { name: "A. Mensah",  avgMTTR: 47, resolved: 98  },
-      { name: "E. Boateng", avgMTTR: 53, resolved: 87  },
-      { name: "S. Addo",    avgMTTR: 59, resolved: 74  },
-      { name: "R. Asante",  avgMTTR: 68, resolved: 59  },
+      { name: "K. Fischer",   avgMTTR: 44, resolved: 112 },
+      { name: "A. Weber",     avgMTTR: 47, resolved: 98  },
+      { name: "L. Hoffmann",  avgMTTR: 53, resolved: 87  },
+      { name: "S. Bauer",     avgMTTR: 59, resolved: 74  },
+      { name: "O. Schmidt",   avgMTTR: 68, resolved: 59  },
     ],
     classAccuracy: [
       { initial: "Critical", correct: 64, escalated: 0,  downgraded: 26, falsePositive: 10 },
