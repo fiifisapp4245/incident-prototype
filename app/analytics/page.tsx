@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef } from "react";
+import { format } from "date-fns";
 import { periodData, type AnalyticsPeriod } from "@/lib/analyticsData";
 import AnalyticsPageTitle from "./_components/AnalyticsPageTitle";
 import AIInsightLayer from "./_components/AIInsightLayer";
@@ -11,6 +12,7 @@ import ServiceHealthScorecard from "./_components/ServiceHealthScorecard";
 import IncidentTrendChart from "./_components/IncidentTrendChart";
 import PeakHoursHeatmap from "./_components/PeakHoursHeatmap";
 import RecurrenceList from "./_components/RecurrenceList";
+import DateRangeModal from "../history/_components/DateRangeModal";
 
 const PERIOD_LABELS: Record<Exclude<AnalyticsPeriod, "custom">, string> = {
   "7d":  "Last 7 days",
@@ -20,15 +22,38 @@ const PERIOD_LABELS: Record<Exclude<AnalyticsPeriod, "custom">, string> = {
 
 export default function AnalyticsPage() {
   const [period, setPeriod] = useState<AnalyticsPeriod>("30d");
+  const [dateRangeOpen, setDateRangeOpen] = useState(false);
+  const [customRange, setCustomRange] = useState({ start: "", end: "" });
+  const prevPeriodRef = useRef<AnalyticsPeriod>("30d");
 
   const resolvedPeriod: Exclude<AnalyticsPeriod, "custom"> =
     period === "custom" ? "30d" : period;
 
   const data = periodData[resolvedPeriod];
-  const periodLabel = PERIOD_LABELS[resolvedPeriod];
+  const periodLabel =
+    period === "custom" && customRange.start && customRange.end
+      ? `${format(new Date(customRange.start), "d MMM")} – ${format(new Date(customRange.end), "d MMM yyyy")}`
+      : PERIOD_LABELS[resolvedPeriod];
 
   const handlePeriodChange = useCallback((p: AnalyticsPeriod) => {
-    setPeriod(p);
+    if (p === "custom") {
+      setDateRangeOpen(true);
+    } else {
+      prevPeriodRef.current = p;
+      setPeriod(p);
+    }
+  }, []);
+
+  const handleRangeApply = useCallback((start: string, end: string) => {
+    prevPeriodRef.current = "custom";
+    setPeriod("custom");
+    setCustomRange({ start, end });
+    setDateRangeOpen(false);
+  }, []);
+
+  const handleRangeCancel = useCallback(() => {
+    setDateRangeOpen(false);
+    setPeriod(prevPeriodRef.current);
   }, []);
 
   const handleScrollTo = useCallback((ref: string) => {
@@ -63,6 +88,15 @@ export default function AnalyticsPage() {
         <PeakHoursHeatmap />
         <RecurrenceList id="recurrence" />
       </div>
+
+      {/* Custom date range modal */}
+      <DateRangeModal
+        open={dateRangeOpen}
+        initialStart={customRange.start}
+        initialEnd={customRange.end}
+        onApply={handleRangeApply}
+        onCancel={handleRangeCancel}
+      />
     </div>
   );
 }
