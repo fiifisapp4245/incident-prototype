@@ -38,22 +38,22 @@ export default function OverviewPage() {
       {/* Summary Strip */}
       <SummaryStrip filters={filters} />
 
-      {/* Row 2: Call Volume · Down Detector · Ticket Flow */}
+      {/* Live Incident Feed — immediately below the summary */}
+      <IncidentFeed filters={filters} />
+
+      {/* Row: Call Volume · Down Detector · Ticket Flow */}
       <div className="grid grid-cols-3 gap-5">
         <CallVolumePanel />
         <DownDetectorPanel />
         <TicketFlowPanel />
       </div>
 
-      {/* Row 3: Severity Donut · Response Status · Affected Services */}
+      {/* Row: Severity Donut · Response Status · Affected Services */}
       <div className="grid grid-cols-3 gap-5">
         <SeverityDonut />
         <ResponseStatusBars />
         <AffectedServicesBubble />
       </div>
-
-      {/* Row 5: Live Incident Feed — full width */}
-      <IncidentFeed filters={filters} />
     </div>
   );
 }
