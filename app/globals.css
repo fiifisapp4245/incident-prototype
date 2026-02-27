@@ -122,3 +122,40 @@ body {
 .progress-bar {
   transition: width 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
+
+/* ── New-incident animations ──────────────────────────────────────────────── */
+
+/* Banner slide-in from above */
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.animate-slide-down {
+  animation: slideDown 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Severity flash overlays — fade from colour to transparent on card arrival */
+@keyframes flashCritical {
+  0%   { background: rgba(255, 59, 92, 0.28); }
+  100% { background: transparent; }
+}
+@keyframes flashMajor {
+  0%   { background: rgba(255, 140, 0, 0.22); }
+  100% { background: transparent; }
+}
+@keyframes flashMinor {
+  0%   { background: rgba(245, 197, 24, 0.18); }
+  100% { background: transparent; }
+}
+.card-flash-critical { animation: flashCritical 0.8s ease-out forwards; }
+.card-flash-major    { animation: flashMajor    0.8s ease-out forwards; }
+.card-flash-minor    { animation: flashMinor    0.8s ease-out forwards; }
+
+/* Breathing glow for unacknowledged card left accent bar */
+@keyframes borderBreathe {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.2; }
+}
+.border-breathe {
+  animation: borderBreathe 2s ease-in-out infinite;
+}
